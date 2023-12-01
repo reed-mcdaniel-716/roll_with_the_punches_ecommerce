@@ -1,0 +1,87 @@
+openapi: 3.0.3
+info:
+  title: roll_with_the_punches_ecommerce
+  version: 1.0.0
+  description: >-
+    Roll with the Punches E-Commerce is an online retailer for all of the best
+    boxing gear
+  contact:
+    name: Reed McDaniel
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /signup:
+    summary: User signup
+  /login:
+    summary: User login
+  /users:
+    summary: User accounts
+  /products:
+    summary: Available products
+  /carts:
+    summary: User carts
+  /orders:
+    summary: User orders
+  /users/{id}:
+    summary: Specific user by ID
+    get:
+      summary: Get a specific user by ID
+      description: 'Get a specific user by ID'
+      operationId: get_users
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - users
+  /carts/{id}:
+    summary: Specific cart by ID
+    get:
+      summary: Get a specific cart by ID
+      description: 'Get a specific cart by ID'
+      operationId: get_carts
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - carts
+  /products/{id}:
+    summary: Specific product by ID
+    get:
+      summary: Get a specific product by ID
+      description: 'Get a specific product by ID'
+      operationId: get_products
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - products
+  /orders/{id}:
+    summary: Specific order by ID
+    get:
+      summary: Get a specific order by ID
+      description: 'Get a specific order by ID'
+      operationId: get_orders
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - orders
+
+components:
+  parameters:
+    idParam:
+      name: id
+      description: resource ID
+      in: path
+      required: true
+      schema:
+        type: string

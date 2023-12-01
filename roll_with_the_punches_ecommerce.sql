@@ -39,7 +39,7 @@ CREATE TYPE "product_brands" AS ENUM (
   'Title'
 );
 
-CREATE TABLE "users" (
+CREATE TABLE IF NOT EXISTS "users" (
   "id" uuid PRIMARY KEY,
   "username" varchar(40) UNIQUE NOT NULL,
   "password" varchar(60) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE "users" (
   "updated_at" timestamp NOT NULL
 );
 
-CREATE TABLE "products" (
+CREATE TABLE IF NOT EXISTS "products" (
   "id" uuid PRIMARY KEY,
   "name" varchar(100) UNIQUE NOT NULL,
   "size" product_sizes NOT NULL,
@@ -56,14 +56,14 @@ CREATE TABLE "products" (
   "description" varchar(1000)
 );
 
-CREATE TABLE "carts" (
+CREATE TABLE IF NOT EXISTS "carts" (
   "id" uuid PRIMARY KEY,
   "user_id" uuid NOT NULL,
   "product_id" uuid NOT NULL,
   "quantity" integer NOT NULL DEFAULT 0
 );
 
-CREATE TABLE "orders" (
+CREATE TABLE IF NOT EXISTS "orders" (
   "id" uuid PRIMARY KEY,
   "user_id" uuid UNIQUE NOT NULL,
   "cart_id" uuid UNIQUE NOT NULL,
@@ -77,10 +77,10 @@ CREATE INDEX ON "orders" USING BTREE ("order_date");
 
 CREATE INDEX ON "orders" USING BTREE ("user_id");
 
-ALTER TABLE "carts" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "carts" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "carts" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
+ALTER TABLE "carts" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "orders" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "orders" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "orders" ADD FOREIGN KEY ("cart_id") REFERENCES "carts" ("id");
+ALTER TABLE "orders" ADD FOREIGN KEY ("cart_id") REFERENCES "carts" ("id") ON DELETE CASCADE;
