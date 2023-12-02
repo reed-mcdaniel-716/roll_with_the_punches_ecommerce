@@ -13,69 +13,170 @@ info:
 paths:
   /signup:
     summary: User signup
+    post:
+      summary: Initial user registration
+      description: "Initial user registration"
+      operationId: signup
+      responses:
+        "201":
+          description: "User registration success"
+          content:
+            application/json:
+              examples:
+                User registration success:
+                  value: |-
+                    {
+                      "id": "3d34cadd-79f4-4ad9-82e8-ce711c992546"
+                    }
+        default:
+          description: Default error sample response
+      tags:
+        - users
   /login:
     summary: User login
-  /users:
-    summary: User accounts
-  /products:
-    summary: Available products
-  /carts:
-    summary: User carts
-  /orders:
-    summary: User orders
-  /users/{id}:
-    summary: Specific user by ID
-    get:
-      summary: Get a specific user by ID
-      description: 'Get a specific user by ID'
-      operationId: get_users
-      parameters:
-        - $ref: '#/components/parameters/idParam'
+    post:
+      summary: User login
+      description: ""
+      operationId: login
       responses:
         default:
           description: Default error sample response
       tags:
         - users
-  /carts/{id}:
-    summary: Specific cart by ID
+  /users:
+    summary: User accounts
     get:
-      summary: Get a specific cart by ID
-      description: 'Get a specific cart by ID'
-      operationId: get_carts
-      parameters:
-        - $ref: '#/components/parameters/idParam'
+      summary: Get all users
+      description: ""
+      operationId: get_all_users
       responses:
         default:
           description: Default error sample response
       tags:
-        - carts
-  /products/{id}:
-    summary: Specific product by ID
+        - users
+  /users/{id}:
+    summary: Specific user by ID
     get:
-      summary: Get a specific product by ID
-      description: 'Get a specific product by ID'
-      operationId: get_products
+      summary: Get a specific user by ID
+      description: Get a specific user by ID
+      operationId: get_user
       parameters:
-        - $ref: '#/components/parameters/idParam'
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - users
+  /products:
+    summary: Available products
+    get:
+      summary: Get all products
+      description: ""
+      operationId: get_all_products
       responses:
         default:
           description: Default error sample response
       tags:
         - products
-  /orders/{id}:
-    summary: Specific order by ID
+    post:
+      summary: Create a new product
+      description: ""
+      operationId: post_product
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - products
+  /products/{id}:
+    summary: Specific product by ID
     get:
-      summary: Get a specific order by ID
-      description: 'Get a specific order by ID'
-      operationId: get_orders
+      summary: Get a specific product by ID
+      description: Get a specific product by ID
+      operationId: get_product
       parameters:
-        - $ref: '#/components/parameters/idParam'
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - products
+  /carts:
+    summary: User carts
+    get:
+      summary: Get all carts
+      description: ""
+      operationId: get_all_carts
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - carts
+    post:
+      summary: Create a new cart
+      description: ""
+      operationId: post_cart
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - carts
+  /carts/{id}:
+    summary: Specific cart by ID
+    get:
+      summary: Get a specific cart by ID
+      description: Get a specific cart by ID
+      operationId: get_cart
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - carts
+  /orders:
+    summary: User orders
+    get:
+      summary: Get all orders
+      description: ""
+      operationId: get_all_orders
       responses:
         default:
           description: Default error sample response
       tags:
         - orders
-
+    post:
+      summary: Create an order
+      description: ""
+      operationId: post_order
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - orders
+  /orders/{id}:
+    summary: Specific order by ID
+    get:
+      summary: Get a specific order by ID
+      description: Get a specific order by ID
+      operationId: get_order
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - orders
+  /checkout:
+    summary: Checkout an order
+    post:
+      summary: Initiate a checkout transaction
+      description: ""
+      operationId: post_checkout
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - orders
 components:
   parameters:
     idParam:
