@@ -6,5 +6,5 @@
 
 ### Database Schema
 
-![image database schema diagram](./roll_with_the_punches_ecommerce.png)
+![image database schema diagram](./database/roll_with_the_punches_ecommerce.png)
 _generated using dbdiagram.io_
