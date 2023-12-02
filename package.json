@@ -1,0 +1,26 @@
+{
+  "name": "roll_with_the_punches_ecommerce",
+  "version": "1.0.0",
+  "description": "Roll with the Punches e-commerce boxing shop",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reed-mcdaniel-716/roll_with_the_punches_ecommerce.git"
+  },
+  "author": "Reed McDaniel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reed-mcdaniel-716/roll_with_the_punches_ecommerce/issues"
+  },
+  "homepage": "https://github.com/reed-mcdaniel-716/roll_with_the_punches_ecommerce#readme",
+  "devDependencies": {
+    "@faker-js/faker": "^8.3.1",
+    "@types/node": "^20.10.2"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.1"
+  }
+}

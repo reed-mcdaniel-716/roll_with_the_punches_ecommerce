@@ -15,11 +15,11 @@ paths:
     summary: User signup
     post:
       summary: Initial user registration
-      description: "Initial user registration"
+      description: Initial user registration
       operationId: signup
       responses:
         "201":
-          description: "User registration success"
+          description: User registration success
           content:
             application/json:
               examples:
@@ -27,6 +27,16 @@ paths:
                   value: |-
                     {
                       "id": "3d34cadd-79f4-4ad9-82e8-ce711c992546"
+                    }
+        "400":
+          description: Bad signup request
+          content:
+            application/json:
+              examples:
+                Bad signup request:
+                  value: |-
+                    {
+                      "message": "Error: Errors in user signup request."
                     }
         default:
           description: Default error sample response
@@ -39,6 +49,36 @@ paths:
       description: ""
       operationId: login
       responses:
+        "200":
+          description: Successful user login
+          content:
+            application/json:
+              examples:
+                Successful user login:
+                  value: |-
+                    {
+                      "id": "dd9177ab-28c4-4a16-ae76-a10b3b066fa1"
+                    }
+        "400":
+          description: Bad user login request
+          content:
+            application/json:
+              examples:
+                Bad user login request:
+                  value: |-
+                    {
+                      "message": "Error: Errors in user login request."
+                    }
+        "404":
+          description: User login account not found
+          content:
+            application/json:
+              examples:
+                User login account not found:
+                  value: |-
+                    {
+                      "message": "Error: User account not found."
+                    }
         default:
           description: Default error sample response
       tags:
@@ -50,6 +90,17 @@ paths:
       description: ""
       operationId: get_all_users
       responses:
+        "200":
+          description: "Successfully get all users"
+          content:
+            application/json:
+              examples:
+                Successfully get all users:
+                  value: |-
+                    [
+                      {"id":"bd1ac3a7-d574-4eb5-aaad-f00b36a6df23","username":"Jon_Hintz","password":"DLxBZgrQxH5yOFl","created_at":"2024-04-16T03:19:38.584Z","updated_at":"2023-12-29T03:56:27.718Z"},
+                      {"id":"d283b52a-e1be-40b4-8e47-83c83e03a34a","username":"Efren_Tillman","password":"UnlqTbpRlaMDmkI","created_at":"2024-02-20T07:35:03.388Z","updated_at":"2024-07-10T09:26:40.756Z"}
+                    ]
         default:
           description: Default error sample response
       tags:
