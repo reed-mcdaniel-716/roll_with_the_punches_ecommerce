@@ -98,8 +98,8 @@ paths:
                 Successfully get all users:
                   value: |-
                     [
-                      {"id":"bd1ac3a7-d574-4eb5-aaad-f00b36a6df23","username":"Jon_Hintz","password":"DLxBZgrQxH5yOFl","created_at":"2024-04-16T03:19:38.584Z","updated_at":"2023-12-29T03:56:27.718Z"},
-                      {"id":"d283b52a-e1be-40b4-8e47-83c83e03a34a","username":"Efren_Tillman","password":"UnlqTbpRlaMDmkI","created_at":"2024-02-20T07:35:03.388Z","updated_at":"2024-07-10T09:26:40.756Z"}
+                      {"id":"a4c32319-cde1-472d-a4e1-eb35cce6737e","username":"Chandler82","password":"O3F_mqS6Tjizowk","created_at":"2024-02-29scT10:58:20.613Z","updated_at":"2024-03-29T08:33:53.017Z"},
+                      {"id":"44c23233-7487-4a3d-ae77-a439a4b6daec","username":"Lou.Barton","password":"hvMK7Rtn7LDTnk3","created_at":"2024-08-04eeT03:42:17.369Z","updated_at":"2024-10-26T16:00:49.398Z"}
                     ]
         default:
           description: Default error sample response
