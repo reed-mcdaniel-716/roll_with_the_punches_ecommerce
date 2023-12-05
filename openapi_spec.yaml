@@ -91,7 +91,7 @@ paths:
       operationId: get_all_users
       responses:
         "200":
-          description: "Successfully get all users"
+          description: Successfully get all users
           content:
             application/json:
               examples:
@@ -114,28 +114,130 @@ paths:
       parameters:
         - $ref: "#/components/parameters/idParam"
       responses:
+        "200":
+          description: Successfully get user by ID
+          content:
+            application/json:
+              examples:
+                Successfully get user by ID:
+                  value: >-
+                    {"id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","username":"Earline96","password":"3zoG9xB1FDi_p2b","created_at":"2024-11-13T10:54:01.091Z","updated_at":"2024-05-30T20:54:57.594Z"}
+        "404":
+          description: User not found
+          content:
+            application/json:
+              examples:
+                User not found:
+                  value: '{"message": "Error: User not found."}'
+        default:
+          description: Default error sample response
+      tags:
+        - users
+    patch:
+      summary: Update a user by ID
+      description: Update a user by ID
+      operationId: patch_user
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          description: Successfully patch user by ID
+          content:
+            application/json:
+              examples:
+                Successfully patch user by ID:
+                  value: >-
+                    {"id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","username":"Earline96","password":"3zoG9xB1FDi_p2b","created_at":"2024-11-13T10:54:01.091Z","updated_at":"2024-05-30T20:54:57.594Z"}
+        "400":
+          description: Bad request for user patch by ID
+          content:
+            application/json:
+              examples:
+                Bad request for user patch by ID:
+                  value: '{"message": "Error: Errors in request to patch user by ID."}'
+        "404":
+          description: User not found by ID
+          content:
+            application/json:
+              examples:
+                User not found by ID:
+                  value: '{"message": "Error: User not found by ID."}'
+        default:
+          description: Default error sample response
+      tags:
+        - users
+    delete:
+      summary: Delete user by ID
+      description: Delete user by ID
+      operationId: delete_user
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          description: Successfully delete user by ID
+          content:
+            application/json:
+              examples:
+                Successfully delete user by ID:
+                  value: '{"id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768"}'
+        "404":
+          description: "User not found for delete by ID"
+          content:
+            application/json:
+              examples:
+                User not found for delete by ID:
+                  value: '{"message": "Error: User not found by ID."}'
         default:
           description: Default error sample response
       tags:
         - users
   /products:
-    summary: Available products
+    summary: product accounts
     get:
       summary: Get all products
       description: ""
       operationId: get_all_products
       responses:
+        "200":
+          description: Successfully get all products
+          content:
+            application/json:
+              examples:
+                Successfully get all products:
+                  value: |-
+                    [
+                      {"id":"dac187c4-9929-4f3a-a862-18139754f233","name":"Fairtex Heavyweight Gloves","size":"16oz","brand":"Fairtex","color":"red","description":"Fairtex's best 160z gloves"},
+                      {"id":"af285154-d7ac-481a-990a-537bd1bef1ce","name":"Venum 2.0 Shorts","size":"xxl","brand":"Venum","color":"purple","description":"Venum's best performing XXL shorts"}
+                    ]
         default:
           description: Default error sample response
       tags:
         - products
     post:
-      summary: Create a new product
-      description: ""
-      operationId: post_product
+      summary: Create product
+      description: Create product
+      operationId: create_product
       responses:
-        default:
-          description: Default error sample response
+        "201":
+          description: Successfully create product
+          content:
+            application/json:
+              examples:
+                Successfully create product:
+                  value: |-
+                    {
+                      "id": "dac187c4-9929-4f3a-a862-18139754f233"
+                    }
+        "400":
+          description: Bad request for product creation
+          content:
+            application/json:
+              examples:
+                Bad request for product creation:
+                  value: |-
+                    {
+                      "message": "Error: Errors product create request."
+                    }
       tags:
         - products
   /products/{id}:
@@ -147,28 +249,130 @@ paths:
       parameters:
         - $ref: "#/components/parameters/idParam"
       responses:
+        "200":
+          description: Successfully get product by ID
+          content:
+            application/json:
+              examples:
+                Successfully get product by ID:
+                  value: >-
+                    {"id":"dac187c4-9929-4f3a-a862-18139754f233","name":"Fairtex Heavyweight Gloves","size":"16oz","brand":"Fairtex","color":"red","description":"Fairtex's best 160z gloves"}
+        "404":
+          description: product not found
+          content:
+            application/json:
+              examples:
+                product not found:
+                  value: '{"message": "Error: product not found."}'
+        default:
+          description: Default error sample response
+      tags:
+        - products
+    patch:
+      summary: Update a product by ID
+      description: Update a product by ID
+      operationId: patch_product
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          description: Successfully patch product by ID
+          content:
+            application/json:
+              examples:
+                Successfully patch product by ID:
+                  value: >-
+                    {"id":"dac187c4-9929-4f3a-a862-18139754f233","name":"Fairtex Heavyweight Gloves","size":"16oz","brand":"Fairtex","color":"red","description":"Fairtex's best 160z gloves"}
+        "400":
+          description: Bad request for product patch by ID
+          content:
+            application/json:
+              examples:
+                Bad request for product patch by ID:
+                  value: '{"message": "Error: Errors in request to patch product by ID."}'
+        "404":
+          description: product not found by ID
+          content:
+            application/json:
+              examples:
+                product not found by ID:
+                  value: '{"message": "Error: product not found by ID."}'
+        default:
+          description: Default error sample response
+      tags:
+        - products
+    delete:
+      summary: Delete product by ID
+      description: Delete product by ID
+      operationId: delete_product
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          description: Successfully delete product by ID
+          content:
+            application/json:
+              examples:
+                Successfully delete product by ID:
+                  value: '{"id":"dac187c4-9929-4f3a-a862-18139754f233"}'
+        "404":
+          description: "product not found for delete by ID"
+          content:
+            application/json:
+              examples:
+                product not found for delete by ID:
+                  value: '{"message": "Error: product not found by ID."}'
         default:
           description: Default error sample response
       tags:
         - products
   /carts:
-    summary: User carts
+    summary: cart accounts
     get:
       summary: Get all carts
       description: ""
       operationId: get_all_carts
       responses:
+        "200":
+          description: Successfully get all carts
+          content:
+            application/json:
+              examples:
+                Successfully get all carts:
+                  value: |-
+                    [
+                      {"id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","product_id":"dac187c4-9929-4f3a-a862-18139754f233","quantity":1},
+                      {"id":"d78a0e8f-bef1-4930-88f4-34f4493fe536","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","product_id":"af285154-d7ac-481a-990a-537bd1bef1ce","quantity":2}
+                    ]
         default:
           description: Default error sample response
       tags:
         - carts
     post:
-      summary: Create a new cart
-      description: ""
-      operationId: post_cart
+      summary: Create cart
+      description: Create cart
+      operationId: create_cart
       responses:
-        default:
-          description: Default error sample response
+        "201":
+          description: Successfully create cart
+          content:
+            application/json:
+              examples:
+                Successfully create cart:
+                  value: |-
+                    {
+                      "id": "9b3a85fb-92ae-425f-9bcf-2bc39d656de4"
+                    }
+        "400":
+          description: Bad request for cart creation
+          content:
+            application/json:
+              examples:
+                Bad request for cart creation:
+                  value: |-
+                    {
+                      "message": "Error: Errors cart create request."
+                    }
       tags:
         - carts
   /carts/{id}:
@@ -180,28 +384,130 @@ paths:
       parameters:
         - $ref: "#/components/parameters/idParam"
       responses:
+        "200":
+          description: Successfully get cart by ID
+          content:
+            application/json:
+              examples:
+                Successfully get cart by ID:
+                  value: >-
+                    {"id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","product_id":"dac187c4-9929-4f3a-a862-18139754f233","quantity":1}
+        "404":
+          description: cart not found
+          content:
+            application/json:
+              examples:
+                cart not found:
+                  value: '{"message": "Error: cart not found."}'
+        default:
+          description: Default error sample response
+      tags:
+        - carts
+    patch:
+      summary: Update a cart by ID
+      description: Update a cart by ID
+      operationId: patch_cart
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          description: Successfully patch cart by ID
+          content:
+            application/json:
+              examples:
+                Successfully patch cart by ID:
+                  value: >-
+                    {"id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","product_id":"dac187c4-9929-4f3a-a862-18139754f233","quantity":1}
+        "400":
+          description: Bad request for cart patch by ID
+          content:
+            application/json:
+              examples:
+                Bad request for cart patch by ID:
+                  value: '{"message": "Error: Errors in request to patch cart by ID."}'
+        "404":
+          description: cart not found by ID
+          content:
+            application/json:
+              examples:
+                cart not found by ID:
+                  value: '{"message": "Error: cart not found by ID."}'
+        default:
+          description: Default error sample response
+      tags:
+        - carts
+    delete:
+      summary: Delete cart by ID
+      description: Delete cart by ID
+      operationId: delete_cart
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          description: Successfully delete cart by ID
+          content:
+            application/json:
+              examples:
+                Successfully delete cart by ID:
+                  value: '{"id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4"}'
+        "404":
+          description: "cart not found for delete by ID"
+          content:
+            application/json:
+              examples:
+                cart not found for delete by ID:
+                  value: '{"message": "Error: cart not found by ID."}'
         default:
           description: Default error sample response
       tags:
         - carts
   /orders:
-    summary: User orders
+    summary: order accounts
     get:
       summary: Get all orders
       description: ""
       operationId: get_all_orders
       responses:
+        "200":
+          description: Successfully get all orders
+          content:
+            application/json:
+              examples:
+                Successfully get all orders:
+                  value: |-
+                    [
+                      {"id":"36a6e96f-87fa-48a6-9bfd-67b960143e67","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","cart_id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","order_date":"2024-02-22T16:21:15.520Z","is_gift":false},
+                      {"id":"445c7031-4045-4bcb-8b87-443134f61a5c","user_id":"db662ab6-b81c-4c0b-9641-1a2f115f363f","cart_id":"d78a0e8f-bef1-4930-88f4-34f4493fe536","order_date":"2024-02-15T11:15:55.502Z","is_gift":true}
+                    ]
         default:
           description: Default error sample response
       tags:
         - orders
     post:
-      summary: Create an order
-      description: ""
-      operationId: post_order
+      summary: Create order
+      description: Create order
+      operationId: create_order
       responses:
-        default:
-          description: Default error sample response
+        "201":
+          description: Successfully create order
+          content:
+            application/json:
+              examples:
+                Successfully create order:
+                  value: |-
+                    {
+                      "id": "36a6e96f-87fa-48a6-9bfd-67b960143e67"
+                    }
+        "400":
+          description: Bad request for order creation
+          content:
+            application/json:
+              examples:
+                Bad request for order creation:
+                  value: |-
+                    {
+                      "message": "Error: Errors order create request."
+                    }
       tags:
         - orders
   /orders/{id}:
@@ -213,6 +519,79 @@ paths:
       parameters:
         - $ref: "#/components/parameters/idParam"
       responses:
+        "200":
+          description: Successfully get order by ID
+          content:
+            application/json:
+              examples:
+                Successfully get order by ID:
+                  value: >-
+                    {"id":"36a6e96f-87fa-48a6-9bfd-67b960143e67","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","cart_id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","order_date":"2024-02-22T16:21:15.520Z","is_gift":false}
+        "404":
+          description: order not found
+          content:
+            application/json:
+              examples:
+                order not found:
+                  value: '{"message": "Error: order not found."}'
+        default:
+          description: Default error sample response
+      tags:
+        - orders
+    patch:
+      summary: Update a order by ID
+      description: Update a order by ID
+      operationId: patch_order
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          description: Successfully patch order by ID
+          content:
+            application/json:
+              examples:
+                Successfully patch order by ID:
+                  value: >-
+                    {"id":"36a6e96f-87fa-48a6-9bfd-67b960143e67","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","cart_id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","order_date":"2024-02-22T16:21:15.520Z","is_gift":false}
+        "400":
+          description: Bad request for order patch by ID
+          content:
+            application/json:
+              examples:
+                Bad request for order patch by ID:
+                  value: '{"message": "Error: Errors in request to patch order by ID."}'
+        "404":
+          description: order not found by ID
+          content:
+            application/json:
+              examples:
+                order not found by ID:
+                  value: '{"message": "Error: order not found by ID."}'
+        default:
+          description: Default error sample response
+      tags:
+        - orders
+    delete:
+      summary: Delete order by ID
+      description: Delete order by ID
+      operationId: delete_order
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          description: Successfully delete order by ID
+          content:
+            application/json:
+              examples:
+                Successfully delete order by ID:
+                  value: '{"id":"36a6e96f-87fa-48a6-9bfd-67b960143e67"}'
+        "404":
+          description: "order not found for delete by ID"
+          content:
+            application/json:
+              examples:
+                order not found for delete by ID:
+                  value: '{"message": "Error: order not found by ID."}'
         default:
           description: Default error sample response
       tags:
@@ -221,7 +600,7 @@ paths:
     summary: Checkout an order
     post:
       summary: Initiate a checkout transaction
-      description: ""
+      description: "Initiate a checkout transaction"
       operationId: post_checkout
       responses:
         default:
