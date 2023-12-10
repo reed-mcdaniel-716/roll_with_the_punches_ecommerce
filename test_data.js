@@ -1,10 +1,48 @@
 const { faker } = require("@faker-js/faker");
-const {
-  productBrands,
-  productColors,
-  productSizes,
-  productDescriptor,
-} = require("./types.ts");
+
+const productBrands = ['Everlast',
+'Ringside',
+'Venum',
+'Hayabusa',
+'Superare',
+'Fairtex',
+'Title'];
+
+const productSizes = ['10oz',
+'12oz',
+'14oz',
+'16oz',
+'108in',
+'120in',
+'180in',
+'xs',
+'sm',
+'med',
+'lg',
+'xl',
+'xxl',
+'xxxl'];
+
+const productColors = ['black',
+'red',
+'blue',
+'leather brown',
+'gray',
+'white',
+'green',
+'gold',
+'silver',
+'pink',
+'purple'];
+
+const productDescriptor = [
+  'Champion',
+  'Premium',
+  '2.0',
+  '3.0',
+  'Elite',
+  'Sparring'
+];
 
 // USERS
 const userId1 = faker.string.uuid();
@@ -30,13 +68,13 @@ const user2 = {
 console.log(JSON.stringify(user2));
 
 // PRODUCTS
-const productBrand1 = faker.helpers.enumValue(productBrands);
-const productColor1 = faker.helpers.enumValue(productColors);
+const productBrand1 = faker.helpers.arrayElement(productBrands);
+const productColor1 = faker.helpers.arrayElement(productColors);
 const productId1 = faker.string.uuid();
 
 const product1 = {
   id: productId1,
-  name: `${productBrand1} ${faker.helpers.enumValue(productDescriptor)} Gloves`,
+  name: `${productBrand1} ${faker.helpers.arrayElement(productDescriptor)} Gloves`,
   size: "16oz",
   brand: productBrand1,
   color: productColor1,
@@ -45,13 +83,13 @@ const product1 = {
 
 console.log(JSON.stringify(product1));
 
-const productBrand2 = faker.helpers.enumValue(productBrands);
-const productColor2 = faker.helpers.enumValue(productColors);
+const productBrand2 = faker.helpers.arrayElement(productBrands);
+const productColor2 = faker.helpers.arrayElement(productColors);
 const productId2 = faker.string.uuid();
 
 const product2 = {
   id: productId2,
-  name: `${productBrand2} ${faker.helpers.enumValue(productDescriptor)} Shorts`,
+  name: `${productBrand2} ${faker.helpers.arrayElement(productDescriptor)} Shorts`,
   size: "xxl",
   brand: productBrand2,
   color: productColor2,
@@ -109,3 +147,14 @@ const order2 = {
 };
 
 console.log(JSON.stringify(order2));
+
+module.exports = {
+  user1,
+  user2,
+  product1,
+  product2,
+  cart1,
+  cart2,
+  order1,
+  order2
+};

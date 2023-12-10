@@ -461,6 +461,34 @@ paths:
           description: Default error sample response
       tags:
         - carts
+  /carts/{user_id}:
+    summary: Carts by user ID
+    get:
+      summary: Get all carts for a specific user ID
+      description: Get all carts for a specific user ID
+      operationId: get_carts_for_user
+      parameters:
+        - $ref: "#/components/parameters/userIdParam"
+      responses:
+        "200":
+          description: Successfully get cart by user ID
+          content:
+            application/json:
+              examples:
+                Successfully get cart by ID:
+                  value: >-
+                    {"id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","product_id":"dac187c4-9929-4f3a-a862-18139754f233","quantity":1}
+        "404":
+          description: User not found
+          content:
+            application/json:
+              examples:
+                user not found:
+                  value: '{"message": "Error: carts requested for user that does not exist."}'
+        default:
+          description: Default error sample response
+      tags:
+        - carts
   /orders:
     summary: order accounts
     get:
@@ -596,6 +624,34 @@ paths:
           description: Default error sample response
       tags:
         - orders
+  /orders/{user_id}:
+    summary: Orders by user ID
+    get:
+      summary: Get all orders for a specific user
+      description: Get all orders for a specific user
+      operationId: get_orders_for_user
+      parameters:
+        - $ref: "#/components/parameters/userIdParam"
+      responses:
+        "200":
+          description: Successfully get all orders by user ID
+          content:
+            application/json:
+              examples:
+                Successfully get order by ID:
+                  value: >-
+                    {"id":"36a6e96f-87fa-48a6-9bfd-67b960143e67","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","cart_id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","order_date":"2024-02-22T16:21:15.520Z","is_gift":false}
+        "404":
+          description: User not found
+          content:
+            application/json:
+              examples:
+                user not found:
+                  value: '{"message": "Error: orders requested for user that does not exist."}'
+        default:
+          description: Default error sample response
+      tags:
+        - orders
   /checkout:
     summary: Checkout an order
     post:
@@ -612,6 +668,13 @@ components:
     idParam:
       name: id
       description: resource ID
+      in: path
+      required: true
+      schema:
+        type: string
+    userIdParam:
+      name: user_id
+      description: user ID
       in: path
       required: true
       schema:
