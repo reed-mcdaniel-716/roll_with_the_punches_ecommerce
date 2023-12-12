@@ -54,8 +54,6 @@ const user1 = {
   updated_at: faker.date.future(),
 };
 
-console.log(JSON.stringify(user1));
-
 const userId2 = faker.string.uuid();
 const user2 = {
   id: userId2,
@@ -64,8 +62,6 @@ const user2 = {
   created_at: faker.date.future(),
   updated_at: faker.date.future(),
 };
-
-console.log(JSON.stringify(user2));
 
 // PRODUCTS
 const productBrand1 = faker.helpers.arrayElement(productBrands);
@@ -81,8 +77,6 @@ const product1 = {
   description: `${productBrand1}'s best 160z gloves`,
 };
 
-console.log(JSON.stringify(product1));
-
 const productBrand2 = faker.helpers.arrayElement(productBrands);
 const productColor2 = faker.helpers.arrayElement(productColors);
 const productId2 = faker.string.uuid();
@@ -96,8 +90,6 @@ const product2 = {
   description: `${productBrand2}'s best performing XXL shorts`,
 };
 
-console.log(JSON.stringify(product2));
-
 // CARTS
 
 const cartId1 = faker.string.uuid();
@@ -109,8 +101,6 @@ const cart1 = {
   quantity: 1,
 };
 
-console.log(JSON.stringify(cart1));
-
 const cartId2 = faker.string.uuid();
 
 const cart2 = {
@@ -119,8 +109,6 @@ const cart2 = {
   product_id: productId2,
   quantity: 2,
 };
-
-console.log(JSON.stringify(cart2));
 
 // ORDERS
 
@@ -134,8 +122,6 @@ const order1 = {
   is_gift: faker.datatype.boolean(),
 };
 
-console.log(JSON.stringify(order1));
-
 const orderId2 = faker.string.uuid();
 
 const order2 = {
@@ -145,8 +131,6 @@ const order2 = {
   order_date: faker.date.future(),
   is_gift: faker.datatype.boolean(),
 };
-
-console.log(JSON.stringify(order2));
 
 module.exports = {
   user1,

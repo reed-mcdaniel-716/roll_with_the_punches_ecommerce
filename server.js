@@ -8,12 +8,34 @@ const swaggerDocument = YAML.load("./openapi_spec.yaml");
 const PORT = 3000;
 const app = express();
 
+
+// API DOCS
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get('/users', async () => {
+
+// USERS
+app.get('/users', async (req, resp) => {
   const users = await db.readAllUsers();
-  console.log(users);
-})
+  resp.status(200).json(users);
+});
+
+// PRODUCTS
+app.get('/products', async (req, resp) => {
+  const products = await db.readAllProducts();
+  resp.status(200).json(products);
+});
+
+// CARTS
+app.get('/carts', async (req, resp) => {
+  const carts = await db.readAllCarts();
+  resp.status(200).json(carts);
+});
+
+// ORDERS
+app.get('/orders', async (req, resp) => {
+  const orders = await db.readAllOrders();
+  resp.status(200).json(orders);
+});
 
 app.get('/', async (req, res) => {
   console.log('initializing DB')
