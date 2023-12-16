@@ -8,3 +8,7 @@
 
 ![image database schema diagram](./database/roll_with_the_punches_ecommerce.png)
 _generated using dbdiagram.io_
+
+
+### API Design
+- API documentation can be found at the `/api-docs` endpoint
