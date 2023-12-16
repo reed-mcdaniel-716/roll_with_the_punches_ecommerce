@@ -17,6 +17,13 @@ const initializeDatabase = async () => {
     await pool.query('truncate table orders cascade');
 
     await pool.query(
+      'insert into users(username, password) values ($1::text, $2::text)',
+      [
+        'admin', 'password'
+      ]
+    );
+
+    await pool.query(
       'insert into users(id, username, password, created_at, updated_at) values ($1::uuid, $2::text, $3::text, $4::timestamp, $5::timestamp), ($6::uuid, $7::text, $8::text, $9::timestamp, $10::timestamp)',
       [
         user1.id, user1.username, user1.password, user1.created_at, user1.updated_at,
@@ -62,17 +69,27 @@ const createUser = async (username, password) => {
   }
 };
 
-const getUser = async (username, password, cb) => {
+const getUserByUsername = async (username) => {
+  console.log(`looking for user: ${username}`);
   try {
-    const result = await pool.query('select * from users where username = $1::uuid and password = $2::text', [username, password]);
-    if (result.rows.length == 0) {
-      return cb(null, false, { message: 'Incorrect username or password.' });
-    } else {
-      return cb(null, result.rows[0]);
-    }
+    const result = await pool.query('select * from users where username = $1::text', [username]);
+    console.log('Found users: ', result.rows);
+    return result.rows;
   } catch (err) {
-    console.log(`Error geting user: ${err}`);
-    return cb(err);
+    console.log(`Error geting user ${username}: ${err}`);
+    throw err;
+  }
+};
+
+const getUserById = async (id) => {
+  console.log(`looking for user: ${id}`);
+  try {
+    const result = await pool.query('select * from users where id = $1::uuid', [id]);
+    console.log('Found users: ', result.rows);
+    return result.rows;
+  } catch (err) {
+    console.log(`Error geting user ${id}: ${err}`);
+    throw err;
   }
 };
 
@@ -183,7 +200,8 @@ const getAllOrders = async () => {
 
 module.exports = {
   createUser,
-  getUser,
+  getUserById,
+  getUserByUsername,
   updateUser,
   deleteUser,
   createProduct,
