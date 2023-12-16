@@ -19,24 +19,22 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 passport.use(new LocalStrategy(function verify(username, password, cb) {
   db.getUser(username, password, cb);
-  /*db.get('SELECT * FROM users WHERE username = ?', [ username ], function(err, row) {
-    if (err) { return cb(err); }
-    if (!row) { return cb(null, false, { message: 'Incorrect username or password.' }); }
-    
-    crypto.pbkdf2(password, row.salt, 310000, 32, 'sha256', function(err, hashedPassword) {
-      if (err) { return cb(err); }
-      if (!crypto.timingSafeEqual(row.hashed_password, hashedPassword)) {
-        return cb(null, false, { message: 'Incorrect username or password.' });
-      }
-      return cb(null, row);
-    });
-  });*/
 }));
+
+app.get('/login', (req, res) => {
+  console.log("need to login");
+  resp.status(200).send('Ready login');
+});
 
 app.get('/users', async (req, resp) => {
   const users = await db.readAllUsers();
   resp.status(200).json(users);
 });
+
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login'
+}));
 
 // PRODUCTS
 app.get('/products', async (req, resp) => {

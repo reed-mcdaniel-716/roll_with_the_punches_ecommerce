@@ -18,7 +18,7 @@ paths:
       description: Initial user registration
       operationId: signup
       responses:
-        "201":
+        '201':
           description: User registration success
           content:
             application/json:
@@ -28,7 +28,7 @@ paths:
                     {
                       "id": "3d34cadd-79f4-4ad9-82e8-ce711c992546"
                     }
-        "400":
+        '400':
           description: Bad signup request
           content:
             application/json:
@@ -46,10 +46,10 @@ paths:
     summary: User login
     post:
       summary: User login
-      description: ""
-      operationId: login
+      description: ''
+      operationId: post_login
       responses:
-        "200":
+        '200':
           description: Successful user login
           content:
             application/json:
@@ -59,7 +59,7 @@ paths:
                     {
                       "id": "dd9177ab-28c4-4a16-ae76-a10b3b066fa1"
                     }
-        "400":
+        '400':
           description: Bad user login request
           content:
             application/json:
@@ -69,7 +69,7 @@ paths:
                     {
                       "message": "Error: Errors in user login request."
                     }
-        "404":
+        '404':
           description: User login account not found
           content:
             application/json:
@@ -83,14 +83,23 @@ paths:
           description: Default error sample response
       tags:
         - users
+    get:
+      summary: Get login page
+      description: Get login page
+      operationId: get_login
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - users
   /users:
     summary: User accounts
     get:
       summary: Get all users
-      description: ""
+      description: ''
       operationId: get_all_users
       responses:
-        "200":
+        '200':
           description: Successfully get all users
           content:
             application/json:
@@ -112,9 +121,9 @@ paths:
       description: Get a specific user by ID
       operationId: get_user
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully get user by ID
           content:
             application/json:
@@ -122,7 +131,7 @@ paths:
                 Successfully get user by ID:
                   value: >-
                     {"id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","username":"Earline96","password":"3zoG9xB1FDi_p2b","created_at":"2024-11-13T10:54:01.091Z","updated_at":"2024-05-30T20:54:57.594Z"}
-        "404":
+        '404':
           description: User not found
           content:
             application/json:
@@ -138,9 +147,9 @@ paths:
       description: Update a user by ID
       operationId: patch_user
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully patch user by ID
           content:
             application/json:
@@ -148,14 +157,14 @@ paths:
                 Successfully patch user by ID:
                   value: >-
                     {"id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","username":"Earline96","password":"3zoG9xB1FDi_p2b","created_at":"2024-11-13T10:54:01.091Z","updated_at":"2024-05-30T20:54:57.594Z"}
-        "400":
+        '400':
           description: Bad request for user patch by ID
           content:
             application/json:
               examples:
                 Bad request for user patch by ID:
                   value: '{"message": "Error: Errors in request to patch user by ID."}'
-        "404":
+        '404':
           description: User not found by ID
           content:
             application/json:
@@ -171,17 +180,17 @@ paths:
       description: Delete user by ID
       operationId: delete_user
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully delete user by ID
           content:
             application/json:
               examples:
                 Successfully delete user by ID:
                   value: '{"id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768"}'
-        "404":
-          description: "User not found for delete by ID"
+        '404':
+          description: User not found for delete by ID
           content:
             application/json:
               examples:
@@ -195,10 +204,10 @@ paths:
     summary: product accounts
     get:
       summary: Get all products
-      description: ""
+      description: ''
       operationId: get_all_products
       responses:
-        "200":
+        '200':
           description: Successfully get all products
           content:
             application/json:
@@ -218,7 +227,7 @@ paths:
       description: Create product
       operationId: create_product
       responses:
-        "201":
+        '201':
           description: Successfully create product
           content:
             application/json:
@@ -228,7 +237,7 @@ paths:
                     {
                       "id": "dac187c4-9929-4f3a-a862-18139754f233"
                     }
-        "400":
+        '400':
           description: Bad request for product creation
           content:
             application/json:
@@ -247,17 +256,20 @@ paths:
       description: Get a specific product by ID
       operationId: get_product
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully get product by ID
           content:
             application/json:
               examples:
                 Successfully get product by ID:
                   value: >-
-                    {"id":"dac187c4-9929-4f3a-a862-18139754f233","name":"Fairtex Heavyweight Gloves","size":"16oz","brand":"Fairtex","color":"red","description":"Fairtex's best 160z gloves"}
-        "404":
+                    {"id":"dac187c4-9929-4f3a-a862-18139754f233","name":"Fairtex
+                    Heavyweight
+                    Gloves","size":"16oz","brand":"Fairtex","color":"red","description":"Fairtex's
+                    best 160z gloves"}
+        '404':
           description: product not found
           content:
             application/json:
@@ -273,24 +285,29 @@ paths:
       description: Update a product by ID
       operationId: patch_product
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully patch product by ID
           content:
             application/json:
               examples:
                 Successfully patch product by ID:
                   value: >-
-                    {"id":"dac187c4-9929-4f3a-a862-18139754f233","name":"Fairtex Heavyweight Gloves","size":"16oz","brand":"Fairtex","color":"red","description":"Fairtex's best 160z gloves"}
-        "400":
+                    {"id":"dac187c4-9929-4f3a-a862-18139754f233","name":"Fairtex
+                    Heavyweight
+                    Gloves","size":"16oz","brand":"Fairtex","color":"red","description":"Fairtex's
+                    best 160z gloves"}
+        '400':
           description: Bad request for product patch by ID
           content:
             application/json:
               examples:
                 Bad request for product patch by ID:
-                  value: '{"message": "Error: Errors in request to patch product by ID."}'
-        "404":
+                  value: >-
+                    {"message": "Error: Errors in request to patch product by
+                    ID."}
+        '404':
           description: product not found by ID
           content:
             application/json:
@@ -306,17 +323,17 @@ paths:
       description: Delete product by ID
       operationId: delete_product
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully delete product by ID
           content:
             application/json:
               examples:
                 Successfully delete product by ID:
                   value: '{"id":"dac187c4-9929-4f3a-a862-18139754f233"}'
-        "404":
-          description: "product not found for delete by ID"
+        '404':
+          description: product not found for delete by ID
           content:
             application/json:
               examples:
@@ -330,10 +347,10 @@ paths:
     summary: cart accounts
     get:
       summary: Get all carts
-      description: ""
+      description: ''
       operationId: get_all_carts
       responses:
-        "200":
+        '200':
           description: Successfully get all carts
           content:
             application/json:
@@ -353,7 +370,7 @@ paths:
       description: Create cart
       operationId: create_cart
       responses:
-        "201":
+        '201':
           description: Successfully create cart
           content:
             application/json:
@@ -363,7 +380,7 @@ paths:
                     {
                       "id": "9b3a85fb-92ae-425f-9bcf-2bc39d656de4"
                     }
-        "400":
+        '400':
           description: Bad request for cart creation
           content:
             application/json:
@@ -382,9 +399,9 @@ paths:
       description: Get a specific cart by ID
       operationId: get_cart
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully get cart by ID
           content:
             application/json:
@@ -392,7 +409,7 @@ paths:
                 Successfully get cart by ID:
                   value: >-
                     {"id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","product_id":"dac187c4-9929-4f3a-a862-18139754f233","quantity":1}
-        "404":
+        '404':
           description: cart not found
           content:
             application/json:
@@ -408,9 +425,9 @@ paths:
       description: Update a cart by ID
       operationId: patch_cart
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully patch cart by ID
           content:
             application/json:
@@ -418,14 +435,14 @@ paths:
                 Successfully patch cart by ID:
                   value: >-
                     {"id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","product_id":"dac187c4-9929-4f3a-a862-18139754f233","quantity":1}
-        "400":
+        '400':
           description: Bad request for cart patch by ID
           content:
             application/json:
               examples:
                 Bad request for cart patch by ID:
                   value: '{"message": "Error: Errors in request to patch cart by ID."}'
-        "404":
+        '404':
           description: cart not found by ID
           content:
             application/json:
@@ -441,17 +458,17 @@ paths:
       description: Delete cart by ID
       operationId: delete_cart
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully delete cart by ID
           content:
             application/json:
               examples:
                 Successfully delete cart by ID:
                   value: '{"id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4"}'
-        "404":
-          description: "cart not found for delete by ID"
+        '404':
+          description: cart not found for delete by ID
           content:
             application/json:
               examples:
@@ -468,9 +485,9 @@ paths:
       description: Get all carts for a specific user ID
       operationId: get_carts_for_user
       parameters:
-        - $ref: "#/components/parameters/userIdParam"
+        - $ref: '#/components/parameters/userIdParam'
       responses:
-        "200":
+        '200':
           description: Successfully get cart by user ID
           content:
             application/json:
@@ -478,13 +495,15 @@ paths:
                 Successfully get cart by ID:
                   value: >-
                     {"id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","product_id":"dac187c4-9929-4f3a-a862-18139754f233","quantity":1}
-        "404":
+        '404':
           description: User not found
           content:
             application/json:
               examples:
                 user not found:
-                  value: '{"message": "Error: carts requested for user that does not exist."}'
+                  value: >-
+                    {"message": "Error: carts requested for user that does not
+                    exist."}
         default:
           description: Default error sample response
       tags:
@@ -493,10 +512,10 @@ paths:
     summary: order accounts
     get:
       summary: Get all orders
-      description: ""
+      description: ''
       operationId: get_all_orders
       responses:
-        "200":
+        '200':
           description: Successfully get all orders
           content:
             application/json:
@@ -516,7 +535,7 @@ paths:
       description: Create order
       operationId: create_order
       responses:
-        "201":
+        '201':
           description: Successfully create order
           content:
             application/json:
@@ -526,7 +545,7 @@ paths:
                     {
                       "id": "36a6e96f-87fa-48a6-9bfd-67b960143e67"
                     }
-        "400":
+        '400':
           description: Bad request for order creation
           content:
             application/json:
@@ -545,9 +564,9 @@ paths:
       description: Get a specific order by ID
       operationId: get_order
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully get order by ID
           content:
             application/json:
@@ -555,7 +574,7 @@ paths:
                 Successfully get order by ID:
                   value: >-
                     {"id":"36a6e96f-87fa-48a6-9bfd-67b960143e67","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","cart_id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","order_date":"2024-02-22T16:21:15.520Z","is_gift":false}
-        "404":
+        '404':
           description: order not found
           content:
             application/json:
@@ -571,9 +590,9 @@ paths:
       description: Update a order by ID
       operationId: patch_order
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully patch order by ID
           content:
             application/json:
@@ -581,14 +600,16 @@ paths:
                 Successfully patch order by ID:
                   value: >-
                     {"id":"36a6e96f-87fa-48a6-9bfd-67b960143e67","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","cart_id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","order_date":"2024-02-22T16:21:15.520Z","is_gift":false}
-        "400":
+        '400':
           description: Bad request for order patch by ID
           content:
             application/json:
               examples:
                 Bad request for order patch by ID:
-                  value: '{"message": "Error: Errors in request to patch order by ID."}'
-        "404":
+                  value: >-
+                    {"message": "Error: Errors in request to patch order by
+                    ID."}
+        '404':
           description: order not found by ID
           content:
             application/json:
@@ -604,17 +625,17 @@ paths:
       description: Delete order by ID
       operationId: delete_order
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: '#/components/parameters/idParam'
       responses:
-        "200":
+        '200':
           description: Successfully delete order by ID
           content:
             application/json:
               examples:
                 Successfully delete order by ID:
                   value: '{"id":"36a6e96f-87fa-48a6-9bfd-67b960143e67"}'
-        "404":
-          description: "order not found for delete by ID"
+        '404':
+          description: order not found for delete by ID
           content:
             application/json:
               examples:
@@ -631,9 +652,9 @@ paths:
       description: Get all orders for a specific user
       operationId: get_orders_for_user
       parameters:
-        - $ref: "#/components/parameters/userIdParam"
+        - $ref: '#/components/parameters/userIdParam'
       responses:
-        "200":
+        '200':
           description: Successfully get all orders by user ID
           content:
             application/json:
@@ -641,13 +662,15 @@ paths:
                 Successfully get order by ID:
                   value: >-
                     {"id":"36a6e96f-87fa-48a6-9bfd-67b960143e67","user_id":"9cd5b4df-e88c-49c6-b12f-9c00e0f30768","cart_id":"9b3a85fb-92ae-425f-9bcf-2bc39d656de4","order_date":"2024-02-22T16:21:15.520Z","is_gift":false}
-        "404":
+        '404':
           description: User not found
           content:
             application/json:
               examples:
                 user not found:
-                  value: '{"message": "Error: orders requested for user that does not exist."}'
+                  value: >-
+                    {"message": "Error: orders requested for user that does not
+                    exist."}
         default:
           description: Default error sample response
       tags:
@@ -656,7 +679,7 @@ paths:
     summary: Checkout an order
     post:
       summary: Initiate a checkout transaction
-      description: "Initiate a checkout transaction"
+      description: Initiate a checkout transaction
       operationId: post_checkout
       responses:
         default:

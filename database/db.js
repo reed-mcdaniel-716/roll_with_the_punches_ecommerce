@@ -53,7 +53,7 @@ const initializeDatabase = async () => {
 };
 
 // USERS
-const createUser = async (username, password, cb) => {
+const createUser = async (username, password) => {
   try {
     const result = await pool.query('insert or ignore into users (username, password) values ($1, $2)', [username, password]);
     return result.rows;
@@ -62,12 +62,17 @@ const createUser = async (username, password, cb) => {
   }
 };
 
-const getUser = async (username, password) => {
+const getUser = async (username, password, cb) => {
   try {
     const result = await pool.query('select * from users where username = $1::uuid and password = $2::text', [username, password]);
-    return result.rows;
+    if (result.rows.length == 0) {
+      return cb(null, false, { message: 'Incorrect username or password.' });
+    } else {
+      return cb(null, result.rows[0]);
+    }
   } catch (err) {
     console.log(`Error geting user: ${err}`);
+    return cb(err);
   }
 };
 
