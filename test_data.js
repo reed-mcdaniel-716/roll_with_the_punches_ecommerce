@@ -1,47 +1,53 @@
 const { faker } = require("@faker-js/faker");
 
-const productBrands = ['Everlast',
-'Ringside',
-'Venum',
-'Hayabusa',
-'Superare',
-'Fairtex',
-'Title'];
+const productBrands = [
+  "Everlast",
+  "Ringside",
+  "Venum",
+  "Hayabusa",
+  "Superare",
+  "Fairtex",
+  "Title",
+];
 
-const productSizes = ['10oz',
-'12oz',
-'14oz',
-'16oz',
-'108in',
-'120in',
-'180in',
-'xs',
-'sm',
-'med',
-'lg',
-'xl',
-'xxl',
-'xxxl'];
+const productSizes = [
+  "10oz",
+  "12oz",
+  "14oz",
+  "16oz",
+  "108in",
+  "120in",
+  "180in",
+  "xs",
+  "sm",
+  "med",
+  "lg",
+  "xl",
+  "xxl",
+  "xxxl",
+];
 
-const productColors = ['black',
-'red',
-'blue',
-'leather brown',
-'gray',
-'white',
-'green',
-'gold',
-'silver',
-'pink',
-'purple'];
+const productColors = [
+  "black",
+  "red",
+  "blue",
+  "leather brown",
+  "gray",
+  "white",
+  "green",
+  "gold",
+  "silver",
+  "pink",
+  "purple",
+];
 
 const productDescriptor = [
-  'Champion',
-  'Premium',
-  '2.0',
-  '3.0',
-  'Elite',
-  'Sparring'
+  "Champion",
+  "Premium",
+  "2.0",
+  "3.0",
+  "Elite",
+  "Sparring",
 ];
 
 // USERS
@@ -70,7 +76,9 @@ const productId1 = faker.string.uuid();
 
 const product1 = {
   id: productId1,
-  name: `${productBrand1} ${faker.helpers.arrayElement(productDescriptor)} Gloves`,
+  name: `${productBrand1} ${faker.helpers.arrayElement(
+    productDescriptor
+  )} Gloves`,
   size: "16oz",
   brand: productBrand1,
   color: productColor1,
@@ -83,7 +91,9 @@ const productId2 = faker.string.uuid();
 
 const product2 = {
   id: productId2,
-  name: `${productBrand2} ${faker.helpers.arrayElement(productDescriptor)} Shorts`,
+  name: `${productBrand2} ${faker.helpers.arrayElement(
+    productDescriptor
+  )} Shorts`,
   size: "xxl",
   brand: productBrand2,
   color: productColor2,
@@ -140,5 +150,5 @@ module.exports = {
   cart1,
   cart2,
   order1,
-  order2
+  order2,
 };
