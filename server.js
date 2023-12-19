@@ -173,6 +173,20 @@ app.get("/users", async (req, resp) => {
   resp.status(200).json(users);
 });
 
+app.post("/signup", async (req, resp) => {
+  console.log(
+    `signing up user ${req.body.username} with password ${req.body.password}`
+  );
+  const result = await db.createUser(req.body.username, req.body.password);
+  if (result.user_id) {
+    resp.status(201).json({ id: result.user_id });
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
 // PRODUCTS
 app.get("/products", async (req, resp) => {
   console.log("getting products");

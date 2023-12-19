@@ -102,12 +102,14 @@ const initializeDatabase = async () => {
 const createUser = async (username, password) => {
   try {
     const result = await pool.query(
-      "insert or ignore into users (username, password) values ($1, $2)",
+      "insert into users (username, password) values ($1, $2) returning id",
       [username, password]
     );
-    return result.rows;
+    const id = result.rows[0].id;
+    return { user_id: id, error: null };
   } catch (err) {
     console.log(`Error creating user: ${err}`);
+    return { user_id: null, error: err };
   }
 };
 
