@@ -10,6 +10,15 @@ const {
   order2,
 } = require("../test_data");
 
+const constructError = (name, severity, detail, constraint, functionName) => {
+  const errName = name ?? "error";
+  const errSeverity = severity ?? "ERROR";
+  const errDetail = detail ?? `An error has occured in ${functionName}`;
+  const errConstraint = constraint ?? null;
+  const err = {name: errName, severity: errSeverity, detail: errDetail, constraint: errConstraint};
+  return err;
+}
+
 const pool = new pg.Pool({
   user: "postgres",
   host: "localhost",
@@ -94,68 +103,135 @@ const initializeDatabase = async () => {
       ]
     );
   } catch (err) {
-    console.log(`Error initializing database: ${err}`);
+    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "initializeDatabase");
+    console.log(`Error initializing database: ${errObj}`);
+    throw new Error(JSON.stringify(errObj));
   }
 };
 
 // USERS
 const createUser = async (username, password) => {
   try {
+    if (username === undefined || password === undefined) {
+      throw new Error("Either username or password not provided to createUser");
+    }
     const result = await pool.query(
-      "insert into users (username, password) values ($1, $2) returning id",
+      "insert into users (username, password) values ($1::text, $2::text) returning id",
       [username, password]
     );
     const id = result.rows[0].id;
     return { user_id: id, error: null };
   } catch (err) {
-    console.log(`Error creating user: ${err}`);
-    return { user_id: null, error: err };
+    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "createUser");
+    console.log(`Error creating user: ${errObj}`);
+    return { user_id: null, error: errObj };
   }
 };
 
 const getUserByUsername = async (username) => {
   console.log(`looking for user: ${username}`);
   try {
+    if (username === undefined) {
+      throw new Error("No username provided to getUserByUsername");
+    }
     const result = await pool.query(
       "select * from users where username = $1::text",
       [username]
     );
-    console.log("Found users: ", result.rows);
-    return result.rows;
+    const user = result[0];
+    return {user: user, error: null};
   } catch (err) {
-    console.log(`Error geting user ${username}: ${err}`);
-    throw err;
+    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "getUserByUsername");
+    console.log(`Error geting user ${username}: ${errObj}`);
+    return {user: null, error: errObj};
   }
 };
 
 const getUserById = async (id) => {
   console.log(`looking for user: ${id}`);
   try {
-    const result = await pool.query("select * from users where id = $1::uuid", [
-      id,
-    ]);
-    console.log("Found users: ", result.rows);
-    return result.rows;
+    if (id === undefined) {
+      throw new Error("No id provided to getUserById");
+    }
+    const result = await pool.query(
+      "select * from users where id = $1::uuid",
+      [id]
+    );
+    const user = result[0];
+    return {user: user, error: null};
   } catch (err) {
-    console.log(`Error geting user ${id}: ${err}`);
-    throw err;
+    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "getUserById");
+    console.log(`Error geting user ${id}: ${errObj}`);
+    return {user: null, error: errObj};
   }
 };
 
-const updateUser = async () => {};
+const updateUser = async (user_id, username, password) => {
+  try {
+    if (user_id === undefined) {
+      throw new Error("No user_id provided to updateUser");
+    }
 
-const deleteUser = async () => {};
+    let result;
+    if (username !== undefined && password !== undefined) {
+      result = await pool.query(
+        "update users set username = $1::text, password = $2::text where id = $3::uuid returning id",
+        [username, password, user_id]
+      );
+    } else if (username !== undefined) {
+      result = await pool.query(
+        "update users set username = $1::text where id = $2::uuid returning id",
+        [username, user_id]
+      );
+    } else if (password !== undefined) {
+      result = await pool.query(
+        "update users set password = $1::text where id = $2::uuid returning id",
+        [password, user_id]
+      );
+    }
+    const id = result.rows[0].id;
+    return { user_id: id, error: null };
+  } catch (err) {
+    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "updateUser");
+    console.log(`Error updating user: ${errObj}`);
+    return { user_id: null, error: errObj };
+  }
+};
 
-const getAllUserCarts = async () => {};
+const deleteUser = async (user_id) => {
+  try {
+    if (user_id === undefined) {
+      throw new Error("No user_id provided to updateUser");
+    }
 
-const getAllUserOrders = async () => {};
+    const result = await pool.query(
+      "delete from users where id = $1::uuid returning id",
+      [user_id]
+    );
+    
+    const id = result.rows[0].id;
+    return { user_id: id, error: null };
+  } catch (err) {
+    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "deleteUser");
+    console.log(`Error deleting user: ${errObj}`);
+    return { user_id: null, error: errObj };
+  }
+};
+
+// TODO
+//const getAllUserCarts = async (user_id) => {};
+
+// TODO
+//const getAllUserOrders = async (user_id) => {};
 
 const getAllUsers = async () => {
   try {
     const result = await pool.query("select * from users");
-    return result.rows;
+    return { users: result.rows, error: errObj };
   } catch (err) {
-    console.log(`Error getting all users: ${err}`);
+    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "getAllUsers");
+    console.log(`Error getting all users: ${errObj}`);
+    return { users: null, error: errObj };
   }
 };
 

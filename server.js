@@ -49,21 +49,15 @@ const authUser = async (username, password, done) => {
   console.log(`Value of "Password" in authUser function ----> ${password}`); //passport will popuplate, password = req.body.password
 
   // Use the "user" and "password" to search the DB and match user/password to authenticate the user
-  // 1. If the user not found, done (null, false)
-  // 2. If the password does not match, done (null, false)
-  // 3. If user found and password match, done (null, user)
-
-  //let authenticated_user = { id: 123, name: "Kyle"}
-  //Let's assume that DB search that user found and password matched for Kyle
-
-  //return done (null, authenticated_user )
   try {
-    const users = await db.getUserByUsername(username);
-    if (users.length == 0) {
-      return done(null, false, { message: "No user with that email" });
+    const result = await db.getUserByUsername(username);
+    if (result.err) {
+      return done(new Error(JSON.stringify(result.err)));
+    } else if (!result.user){
+      return done(null, false, { message: "No user with that username" });
     }
 
-    const user = users[0];
+    const user = result.user;
     if (user.password != password) {
       return done(null, false, { message: "Password incorrect" });
     }
@@ -91,14 +85,15 @@ passport.deserializeUser(async (id, done) => {
   console.log("---------> Deserialize Id");
   console.log(id);
 
-  //done (null, {name: "Kyle", id: 123} )
   try {
-    const users = await db.getUserById(id);
-    if (users.length == 0) {
-      return done(null, false, { message: "No user with that email" });
+    const result = await db.getUserById(id);
+    if (result.err) {
+      return done(new Error(JSON.stringify(result.err)));
+    } else if (!result.user){
+      return done(null, false, { message: "No user with that id" });
     }
 
-    const user = users[0];
+    const user = result.user;
     return done(null, user);
   } catch (err) {
     done(err);
@@ -111,7 +106,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 //Middleware to see how the params are populated by Passport
-let count = 1;
+/*let count = 1;
 
 const printData = (req, res, next) => {
   console.log("\n==============================");
@@ -136,10 +131,10 @@ const printData = (req, res, next) => {
   next();
 };
 
-app.use(printData); //user printData function as middleware to print populated variables
+app.use(printData); //user printData function as middleware to print populated variables*/
 
 app.get("/login", checkLoggedIn, (req, res) => {
-  res.send("login screen, try again");
+  res.status(400).json({"error":{"name":"error","severity":"ERROR","detail":"login screen, try again."}});
 });
 
 app.post(
@@ -167,17 +162,70 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // USERS
 
-app.get("/users", async (req, resp) => {
-  console.log("getting users");
-  const users = await db.getAllUsers();
-  resp.status(200).json(users);
-});
-
 app.post("/signup", async (req, resp) => {
   console.log(
     `signing up user ${req.body.username} with password ${req.body.password}`
   );
   const result = await db.createUser(req.body.username, req.body.password);
+  if (result.user_id) {
+    resp.status(201).json({ id: result.user_id });
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+app.get("/users", async (req, resp) => {
+  console.log("getting users");
+  const result = await db.getAllUsers();
+  if (result.users) {
+    resp.status(200).json(users);
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+app.get("/users/:id", async (req, resp) => {
+  console.log(`getting user ${req.user.id}`);
+  const result = await db.getUserById(req.params.id);
+  if (result.user) {
+    resp.status(200).json({id: user.id});
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+
+app.patch("/users/:id", async (req, resp) => {
+  console.log(
+    `updating user ${req.params.id} with username ${req.body.username} and password ${req.body.password}`
+  );
+  const result = await db.updateUser(
+    req.params.id,
+    req.body.username,
+    req.body.password
+  );
+  if (result.user_id) {
+    resp.status(201).json({ id: result.user_id });
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+app.delete("/users/:id", async (req, resp) => {
+  console.log(
+    `deleting user ${req.params.id}`
+  );
+  const result = await db.deleteUser(
+    req.params.id
+  );
   if (result.user_id) {
     resp.status(201).json({ id: result.user_id });
   } else if (result.error) {
