@@ -236,11 +236,61 @@ const getAllUsers = async () => {
 };
 
 // PRODUCTS
-const createProduct = async () => {};
+const createProduct = async (name, size, color, brand, description) => {
+  try {
+    const inputs = [name, size, color, brand, description];
+    if(inputs.every((elem) => elem === undefined)){
+      throw new Error("No attributes provided for createProduct");
+    }
+    const result = await pool.query(
+      "insert into products (name, size, color, brand, description) values ($1::text, $2::text, $3::text, $4::text, $5::text) returning id",
+      [...inputs]
+    );
+    const id = result.rows[0].id;
+    return { product_id: id, error: null };
+  } catch (err) {
+    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "createProduct");
+    console.log(`Error creating product: ${errObj}`);
+    return { product_id: null, error: errObj };
+  }
+};
 
-const getProduct = async () => {};
+const getProduct = async (id) => {
+  try {
+    if(id === undefined){
+      throw new Error("No id provided for getProduct");
+    }
+    const result = await pool.query(
+      "select * from products where id = $1::uuid",
+      [id]
+    );
+    const product_id = result.rows[0].id;
+    return { product_id: product_id, error: null };
+  } catch (err) {
+    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "getProduct");
+    console.log(`Error getting product: ${errObj}`);
+    return { product_id: null, error: errObj };
+  }
+};
 
-const updateProduct = async () => {};
+const updateProduct = async (name, size, color, brand, description) => {
+  try {
+    const inputs = {name, size, color, brand, description};
+    if(inputs.every((elem) => elem === undefined)){
+      throw new Error("No attributes provided for createProduct");
+    }
+    const result = await pool.query(
+      "insert into products (name, size, color, brand, description) values ($1::text, $2::text, $3::text, $4::text, $5::text) returning id",
+      [...inputs]
+    );
+    const id = result.rows[0].id;
+    return { product_id: id, error: null };
+  } catch (err) {
+    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "createProduct");
+    console.log(`Error creating product: ${errObj}`);
+    return { product_id: null, error: errObj };
+  }
+};
 
 const deleteProduct = async () => {};
 
