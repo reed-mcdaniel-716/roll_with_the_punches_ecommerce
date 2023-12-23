@@ -180,7 +180,7 @@ app.get("/users", async (req, resp) => {
   console.log("getting users");
   const result = await db.getAllUsers();
   if (result.users) {
-    resp.status(200).json(users);
+    resp.status(200).json(result.users);
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {
@@ -189,10 +189,10 @@ app.get("/users", async (req, resp) => {
 });
 
 app.get("/users/:id", async (req, resp) => {
-  console.log(`getting user ${req.user.id}`);
+  console.log(`getting user ${req.params.id}`);
   const result = await db.getUserById(req.params.id);
   if (result.user) {
-    resp.status(200).json({id: user.id});
+    resp.status(200).json({id: result.user.id});
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {
@@ -211,7 +211,7 @@ app.patch("/users/:id", async (req, resp) => {
     req.body.password
   );
   if (result.user_id) {
-    resp.status(201).json({ id: result.user_id });
+    resp.status(200).json({ id: result.user_id });
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {
@@ -227,7 +227,7 @@ app.delete("/users/:id", async (req, resp) => {
     req.params.id
   );
   if (result.user_id) {
-    resp.status(201).json({ id: result.user_id });
+    resp.status(200).json({ id: result.user_id });
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {
@@ -240,6 +240,78 @@ app.get("/products", async (req, resp) => {
   console.log("getting products");
   const products = await db.getAllProducts();
   resp.status(200).json(products);
+});
+
+app.post("/products", async (req, resp) => {
+  console.log(
+    `creating product with attributes: `
+  );
+  console.log(req.body)
+  const result = await db.createProduct(
+    req.body.name,
+    req.body.size,
+    req.body.color,
+    req.body.brand,
+    req.body.description
+  );
+  if (result.product_id) {
+    resp.status(201).json({ id: result.product_id });
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+app.get("/products/:id", async (req, resp) => {
+  console.log(`getting product ${req.params.id}`);
+  const result = await db.getProduct(req.params.id);
+  if (result.product) {
+    resp.status(200).json({id: result.product.id});
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+
+app.patch("/products/:id", async (req, resp) => {
+  console.log(
+    `updating product ${req.params.id} with attributes: `
+  );
+  console.log(req.body)
+  const result = await db.updateProduct(
+    req.params.id,
+    req.body.name,
+    req.body.size,
+    req.body.color,
+    req.body.brand,
+    req.body.description
+  );
+  if (result.product_id) {
+    resp.status(200).json({ id: result.product_id });
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+app.delete("/products/:id", async (req, resp) => {
+  console.log(
+    `deleting user ${req.params.id}`
+  );
+  const result = await db.deleteUser(
+    req.params.id
+  );
+  if (result.user_id) {
+    resp.status(200).json({ id: result.user_id });
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
 });
 
 // CARTS

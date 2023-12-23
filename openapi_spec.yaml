@@ -71,7 +71,7 @@ paths:
     summary: Operations on products
     get:
       summary: Get all products
-      description: ""
+      description: Get all products
       operationId: get_all_products
       tags:
         - products

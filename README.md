@@ -21,4 +21,4 @@ curl --data "username=admin&password=password" https://zany-halibut-p6x9ww64jc7w
 
 ## TODO
 
-- finish product endpoints db side then server side; left off at updateProduct
+- start on cart endpoints

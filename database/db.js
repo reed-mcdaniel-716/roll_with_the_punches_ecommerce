@@ -1,4 +1,5 @@
 const pg = require("pg");
+const _ = require('lodash');
 const {
   user1,
   user2,
@@ -10,11 +11,11 @@ const {
   order2,
 } = require("../test_data");
 
-const constructError = (name, severity, detail, constraint, functionName) => {
-  const errName = name ?? "error";
-  const errSeverity = severity ?? "ERROR";
-  const errDetail = detail ?? `An error has occured in ${functionName}`;
-  const errConstraint = constraint ?? null;
+const constructError = (error, functionName) => {
+  const errName = error.name ?? "error";
+  const errSeverity = error.severity ?? "ERROR";
+  const errDetail = error.detail ?? error.message ?? `An error has occured in ${functionName}`;
+  const errConstraint = error.constraint ?? null;
   const err = {name: errName, severity: errSeverity, detail: errDetail, constraint: errConstraint};
   return err;
 }
@@ -103,7 +104,7 @@ const initializeDatabase = async () => {
       ]
     );
   } catch (err) {
-    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "initializeDatabase");
+    const errObj = constructError(err, "initializeDatabase");
     console.log(`Error initializing database: ${errObj}`);
     throw new Error(JSON.stringify(errObj));
   }
@@ -122,7 +123,7 @@ const createUser = async (username, password) => {
     const id = result.rows[0].id;
     return { user_id: id, error: null };
   } catch (err) {
-    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "createUser");
+    const errObj = constructError(err, "createUser");
     console.log(`Error creating user: ${errObj}`);
     return { user_id: null, error: errObj };
   }
@@ -141,7 +142,7 @@ const getUserByUsername = async (username) => {
     const user = result[0];
     return {user: user, error: null};
   } catch (err) {
-    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "getUserByUsername");
+    const errObj = constructError(err, "getUserByUsername");
     console.log(`Error geting user ${username}: ${errObj}`);
     return {user: null, error: errObj};
   }
@@ -157,10 +158,10 @@ const getUserById = async (id) => {
       "select * from users where id = $1::uuid",
       [id]
     );
-    const user = result[0];
+    const user = result.rows[0];
     return {user: user, error: null};
   } catch (err) {
-    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "getUserById");
+    const errObj = constructError(err, "getUserById");
     console.log(`Error geting user ${id}: ${errObj}`);
     return {user: null, error: errObj};
   }
@@ -175,24 +176,24 @@ const updateUser = async (user_id, username, password) => {
     let result;
     if (username !== undefined && password !== undefined) {
       result = await pool.query(
-        "update users set username = $1::text, password = $2::text where id = $3::uuid returning id",
+        "update users set username = $1::text, password = $2::text, updated_at = now() where id = $3::uuid returning id",
         [username, password, user_id]
       );
     } else if (username !== undefined) {
       result = await pool.query(
-        "update users set username = $1::text where id = $2::uuid returning id",
+        "update users set username = $1::text, updated_at = now() where id = $2::uuid returning id",
         [username, user_id]
       );
     } else if (password !== undefined) {
       result = await pool.query(
-        "update users set password = $1::text where id = $2::uuid returning id",
+        "update users set password = $1::text, updated_at = now() where id = $2::uuid returning id",
         [password, user_id]
       );
     }
     const id = result.rows[0].id;
     return { user_id: id, error: null };
   } catch (err) {
-    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "updateUser");
+    const errObj = constructError(err, "updateUser");
     console.log(`Error updating user: ${errObj}`);
     return { user_id: null, error: errObj };
   }
@@ -212,7 +213,7 @@ const deleteUser = async (user_id) => {
     const id = result.rows[0].id;
     return { user_id: id, error: null };
   } catch (err) {
-    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "deleteUser");
+    const errObj = constructError(err, "deleteUser");
     console.log(`Error deleting user: ${errObj}`);
     return { user_id: null, error: errObj };
   }
@@ -227,9 +228,10 @@ const deleteUser = async (user_id) => {
 const getAllUsers = async () => {
   try {
     const result = await pool.query("select * from users");
-    return { users: result.rows, error: errObj };
+    const users = result.rows;
+    return { users: users, error: null };
   } catch (err) {
-    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "getAllUsers");
+    const errObj = constructError(err, "getAllUsers");
     console.log(`Error getting all users: ${errObj}`);
     return { users: null, error: errObj };
   }
@@ -243,56 +245,98 @@ const createProduct = async (name, size, color, brand, description) => {
       throw new Error("No attributes provided for createProduct");
     }
     const result = await pool.query(
-      "insert into products (name, size, color, brand, description) values ($1::text, $2::text, $3::text, $4::text, $5::text) returning id",
+      "insert into products (name, size, color, brand, description) values ($1::text, $2::product_sizes, $3::product_colors, $4::product_brands, $5::text) returning id",
       [...inputs]
     );
     const id = result.rows[0].id;
     return { product_id: id, error: null };
   } catch (err) {
-    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "createProduct");
+    const errObj = constructError(err, "createProduct");
     console.log(`Error creating product: ${errObj}`);
     return { product_id: null, error: errObj };
   }
 };
 
-const getProduct = async (id) => {
+const getProduct = async (product_id) => {
   try {
-    if(id === undefined){
+    if(product_id === undefined){
       throw new Error("No id provided for getProduct");
     }
     const result = await pool.query(
       "select * from products where id = $1::uuid",
-      [id]
+      [product_id]
     );
-    const product_id = result.rows[0].id;
-    return { product_id: product_id, error: null };
+    const product = result.rows[0];
+    return { product: product, error: null };
   } catch (err) {
-    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "getProduct");
+    const errObj = constructError(err, "getProduct");
     console.log(`Error getting product: ${errObj}`);
-    return { product_id: null, error: errObj };
+    return { product: null, error: errObj };
   }
 };
 
-const updateProduct = async (name, size, color, brand, description) => {
+const updateProduct = async (product_id, name, size, color, brand, description) => {
   try {
-    const inputs = {name, size, color, brand, description};
-    if(inputs.every((elem) => elem === undefined)){
-      throw new Error("No attributes provided for createProduct");
+    if(product_id === undefined){
+      throw new Error("No product_id provided for updateProduct");
     }
+    const inputs = {name, size, color, brand, description};
+    console.log('product update inputs:');
+    console.log(inputs);
+    const prodAttr = _.omitBy(inputs, _.isUndefined);
+    if (_.isEmpty(prodAttr)){
+      throw new Error("No attributes provided for updateProduct");
+    }
+    let queryStringPrefix = 'update products set';
+    let queryParts = [];
+    for (let key in prodAttr){
+      let sub = '';
+      if(key == 'size'){
+        sub = `${key} = '${prodAttr[key]}'::product_sizes`;
+      } else if (key == 'color'){
+        sub = `${key} = '${prodAttr[key]}'::product_colors`;
+      } else if (key == 'brand'){
+        sub = `${key} = '${prodAttr[key]}'::product_brands`;
+      } else {
+        sub = `${key} = '${prodAttr[key]}'::text`;
+      }
+      queryParts.push(sub);
+    }
+    const queryString = `${queryStringPrefix} ${queryParts.join(', ')} where id = $1::uuid returning id`;
+    console.log(`prod update query string is "${queryString}"`)
     const result = await pool.query(
-      "insert into products (name, size, color, brand, description) values ($1::text, $2::text, $3::text, $4::text, $5::text) returning id",
-      [...inputs]
+      queryString,
+      [product_id]
     );
     const id = result.rows[0].id;
     return { product_id: id, error: null };
   } catch (err) {
-    const errObj = constructError(err.name, err.severity, (err.detail || err.message), err.constraint, "createProduct");
-    console.log(`Error creating product: ${errObj}`);
+    const errObj = constructError(err, "updateProduct");
+    console.log(`Error updating product: ${errObj}`);
+    console.log(err);
     return { product_id: null, error: errObj };
   }
 };
 
-const deleteProduct = async () => {};
+const deleteProduct = async (product_id) => {
+  try {
+    if (product_id === undefined) {
+      throw new Error("No product_id provided to updateProduct");
+    }
+
+    const result = await pool.query(
+      "delete from products where id = $1::uuid returning id",
+      [product_id]
+    );
+    
+    const id = result.rows[0].id;
+    return { product_id: id, error: null };
+  } catch (err) {
+    const errObj = constructError(err, "deleteProduct");
+    console.log(`Error deleting user: ${errObj}`);
+    return { product_id: null, error: errObj };
+  }
+};
 
 const getAllProducts = async () => {
   try {
@@ -357,8 +401,8 @@ module.exports = {
   getOrder,
   updateOrder,
   deleteOrder,
-  getAllUserCarts,
-  getAllUserOrders,
+  //getAllUserCarts,
+  //getAllUserOrders,
   getAllUsers,
   getAllProducts,
   getAllCarts,
