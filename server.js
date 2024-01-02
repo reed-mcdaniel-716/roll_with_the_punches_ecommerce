@@ -192,7 +192,7 @@ app.get("/users/:id", async (req, resp) => {
   console.log(`getting user ${req.params.id}`);
   const result = await db.getUserById(req.params.id);
   if (result.user) {
-    resp.status(200).json({id: result.user.id});
+    resp.status(200).json({...result.user});
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {
@@ -238,8 +238,14 @@ app.delete("/users/:id", async (req, resp) => {
 // PRODUCTS
 app.get("/products", async (req, resp) => {
   console.log("getting products");
-  const products = await db.getAllProducts();
-  resp.status(200).json(products);
+  const result = await db.getAllProducts();
+  if (result.products) {
+    resp.status(200).json(result.products);
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
 });
 
 app.post("/products", async (req, resp) => {
@@ -252,6 +258,7 @@ app.post("/products", async (req, resp) => {
     req.body.size,
     req.body.color,
     req.body.brand,
+    req.body.price,
     req.body.description
   );
   if (result.product_id) {
@@ -267,7 +274,7 @@ app.get("/products/:id", async (req, resp) => {
   console.log(`getting product ${req.params.id}`);
   const result = await db.getProduct(req.params.id);
   if (result.product) {
-    resp.status(200).json({id: result.product.id});
+    resp.status(200).json({...result.product});
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {
@@ -287,6 +294,7 @@ app.patch("/products/:id", async (req, resp) => {
     req.body.size,
     req.body.color,
     req.body.brand,
+    req.body.price,
     req.body.description
   );
   if (result.product_id) {
@@ -300,13 +308,13 @@ app.patch("/products/:id", async (req, resp) => {
 
 app.delete("/products/:id", async (req, resp) => {
   console.log(
-    `deleting user ${req.params.id}`
+    `deleting product ${req.params.id}`
   );
-  const result = await db.deleteUser(
+  const result = await db.deleteProduct(
     req.params.id
   );
-  if (result.user_id) {
-    resp.status(200).json({ id: result.user_id });
+  if (result.product_id) {
+    resp.status(200).json({ id: result.product_id });
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {
@@ -315,18 +323,90 @@ app.delete("/products/:id", async (req, resp) => {
 });
 
 // CARTS
+
+app.post("/carts", async (req, resp) => {
+  console.log(
+    `creating cart with attributes: `
+  );
+  console.log(req.body)
+  const result = await db.createCart(
+    req.body.user_id,
+    req.body.product_id,
+    req.body.quantity
+  );
+  if (result.cart_id) {
+    resp.status(201).json({ id: result.cart_id });
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+app.get("/carts/:id", async (req, resp) => {
+  console.log(`getting cart ${req.params.id}`);
+  const result = await db.getCart(req.params.id);
+  if (result.cart) {
+    resp.status(200).json({...result.cart});
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+app.patch("/carts/:id", async (req, resp) => {
+  console.log(
+    `updating cart ${req.params.id} with attributes: `
+  );
+  console.log(req.body)
+  const result = await db.updateCart(
+    req.params.id,
+    req.body.quantity
+  );
+  if (result.cart_id) {
+    resp.status(200).json({ id: result.cart_id });
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+app.delete("/carts/:id", async (req, resp) => {
+  console.log(
+    `deleting cart ${req.params.id}`
+  );
+  const result = await db.deleteCart(
+    req.params.id
+  );
+  if (result.cart_id) {
+    resp.status(200).json({ id: result.cart_id });
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
 app.get("/carts", async (req, resp) => {
   console.log("getting carts");
-  const carts = await db.getAllCarts();
-  resp.status(200).json(carts);
+  const result = await db.getAllCarts();
+  if (result.carts) {
+    resp.status(200).json(result.carts);
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
 });
 
 // ORDERS
-app.get("/orders", async (req, resp) => {
+/*app.get("/orders", async (req, resp) => {
   console.log("getting orders");
   const orders = await db.getAllOrders();
   resp.status(200).json(orders);
-});
+});*/
 
 // ROOT
 

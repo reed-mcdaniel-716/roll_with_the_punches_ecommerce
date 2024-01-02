@@ -21,4 +21,4 @@ curl --data "username=admin&password=password" https://zany-halibut-p6x9ww64jc7w
 
 ## TODO
 
-- start on cart endpoints
+- start on checkout endpoint

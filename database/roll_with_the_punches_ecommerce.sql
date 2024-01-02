@@ -14,7 +14,6 @@ CREATE TYPE "product_sizes" AS ENUM (
   'xxl',
   'xxxl'
 );
-
 CREATE TYPE "product_colors" AS ENUM (
   'black',
   'red',
@@ -28,7 +27,6 @@ CREATE TYPE "product_colors" AS ENUM (
   'pink',
   'purple'
 );
-
 CREATE TYPE "product_brands" AS ENUM (
   'Everlast',
   'Ringside',
@@ -38,9 +36,7 @@ CREATE TYPE "product_brands" AS ENUM (
   'Fairtex',
   'Title'
 );
-
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE IF NOT EXISTS "users" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
   "username" varchar(40) UNIQUE NOT NULL,
@@ -48,23 +44,21 @@ CREATE TABLE IF NOT EXISTS "users" (
   "created_at" timestamp NOT NULL DEFAULT NOW(),
   "updated_at" timestamp NOT NULL DEFAULT NOW()
 );
-
 CREATE TABLE IF NOT EXISTS "products" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
   "name" varchar(100) UNIQUE NOT NULL,
   "size" product_sizes NOT NULL,
   "color" product_colors NOT NULL,
   "brand" product_brands NOT NULL,
+  "price" money NOT NULL DEFAULT 10.00,
   "description" varchar(1000)
 );
-
 CREATE TABLE IF NOT EXISTS "carts" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
   "user_id" uuid NOT NULL,
   "product_id" uuid NOT NULL,
   "quantity" integer NOT NULL DEFAULT 0
 );
-
 CREATE TABLE IF NOT EXISTS "orders" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
   "user_id" uuid UNIQUE NOT NULL,
@@ -72,25 +66,20 @@ CREATE TABLE IF NOT EXISTS "orders" (
   "order_date" timestamp NOT NULL DEFAULT NOW(),
   "is_gift" boolean DEFAULT false
 );
-
 CREATE UNIQUE INDEX ON "carts" USING BTREE ("user_id", "product_id");
-
 CREATE INDEX ON "orders" USING BTREE ("order_date");
-
 CREATE INDEX ON "orders" USING BTREE ("user_id");
-
-ALTER TABLE "carts" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
-
-ALTER TABLE "carts" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id") ON DELETE CASCADE;
-
-ALTER TABLE "orders" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
-
-ALTER TABLE "orders" ADD FOREIGN KEY ("cart_id") REFERENCES "carts" ("id") ON DELETE CASCADE;
-
-
+ALTER TABLE "carts"
+ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
+ALTER TABLE "carts"
+ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id") ON DELETE CASCADE;
+ALTER TABLE "orders"
+ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
+ALTER TABLE "orders"
+ADD FOREIGN KEY ("cart_id") REFERENCES "carts" ("id") ON DELETE CASCADE;
 /*
-DROP TABLE orders;
-DROP TABLE carts;
-DROP TABLE products;
-DROP TABLE users;
-*/
+ DROP TABLE orders;
+ DROP TABLE carts;
+ DROP TABLE products;
+ DROP TABLE users;
+ */
