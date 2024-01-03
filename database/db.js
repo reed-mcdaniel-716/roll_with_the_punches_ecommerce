@@ -8,7 +8,6 @@ const {
   cart1,
   cart2,
   order1,
-  order2,
 } = require("../test_data");
 
 const constructError = (error, functionName) => {
@@ -57,19 +56,21 @@ const initializeDatabase = async () => {
     );
 
     await pool.query(
-      "insert into products(id, name, size, color, brand, description) values ($1::uuid, $2::text, $3::product_sizes, $4::product_colors, $5::product_brands, $6::text), ($7::uuid, $8::text, $9::product_sizes, $10::product_colors, $11::product_brands, $12::text)",
+      "insert into products(id, name, size, color, brand, price, description) values ($1::uuid, $2::text, $3::product_sizes, $4::product_colors, $5::product_brands, $6::float8::numeric::money, $7::text), ($8::uuid, $9::text, $10::product_sizes, $11::product_colors, $12::product_brands, $13::float8::numeric::money, $14::text)",
       [
         product1.id,
         product1.name,
         product1.size,
         product1.color,
         product1.brand,
+        product1.price,
         product1.description,
         product2.id,
         product2.name,
         product2.size,
         product2.color,
         product2.brand,
+        product2.price,
         product2.description,
       ]
     );
@@ -89,18 +90,14 @@ const initializeDatabase = async () => {
     );
 
     await pool.query(
-      "insert into orders (id, user_id, cart_id, order_date, is_gift) values ($1::uuid, $2::uuid, $3::uuid, $4::timestamp, $5::boolean), ($6::uuid, $7::uuid, $8::uuid, $9::timestamp, $10::boolean)",
+      "insert into orders (id, user_id, cart_id_arr, total_cost, order_date, is_gift) values ($1::uuid, $2::uuid, $3::uuid[], $4::float8::numeric::money, $5::timestamp, $6::boolean)",
       [
         order1.id,
         order1.user_id,
-        order1.cart_id,
+        order1.cart_id_arr,
+        order1.total_cost,
         order1.order_date,
         order1.is_gift,
-        order2.id,
-        order2.user_id,
-        order2.cart_id,
-        order2.order_date,
-        order2.is_gift,
       ]
     );
   } catch (err) {
@@ -450,22 +447,55 @@ const getAllCarts = async () => {
 };
 
 // checkout pulls together all of a user's carts
+const checkout = async (user_id) => {
+  // collect all carts for a user and compile into an order
+  // remove checked out carts
+  try {
+    if(cart_id === undefined){
+      throw new Error("No id provided for getCart");
+    }
+    const result = await pool.query(
+      "select * from carts where id = $1::uuid",
+      [cart_id]
+    );
+    const cart = result.rows[0];
+    return { cart: cart, error: null };
+  } catch (err) {
+    const errObj = constructError(err, "getCart");
+    console.log(`Error getting cart: ${JSON.stringify(errObj)}`);
+    return { cart: null, error: errObj };
+  }
+};
 
 // ORDERS
-const createOrder = async () => {};
 
-const getOrder = async () => {};
-
-const updateOrder = async () => {};
-
-const deleteOrder = async () => {};
+const getOrder = async (order_id) => {
+  try {
+    if(order_id === undefined){
+      throw new Error("No id provided for getOrder");
+    }
+    const result = await pool.query(
+      "select * from orders where id = $1::uuid",
+      [order_id]
+    );
+    const order = result.rows[0];
+    return { order: order, error: null };
+  } catch (err) {
+    const errObj = constructError(err, "getOrder");
+    console.log(`Error getting order: ${JSON.stringify(errObj)}`);
+    return { order: null, error: errObj };
+  }
+};
 
 const getAllOrders = async () => {
   try {
     const result = await pool.query("select * from orders");
-    return result.rows;
+    const orders = result.rows;
+    return { orders: orders, error: null };
   } catch (err) {
-    console.log(`Error getting all orders: ${err}`);
+    const errObj = constructError(err, "getAllOrders");
+    console.log(`Error getting all orders: ${JSON.stringify(errObj)}`);
+    return { orders: null, error: errObj };
   }
 };
 
@@ -483,12 +513,8 @@ module.exports = {
   getCart,
   updateCart,
   deleteCart,
-  createOrder,
+  checkout,
   getOrder,
-  updateOrder,
-  deleteOrder,
-  //getAllUserCarts,
-  //getAllUserOrders,
   getAllUsers,
   getAllProducts,
   getAllCarts,

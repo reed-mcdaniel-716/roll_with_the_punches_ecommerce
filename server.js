@@ -402,17 +402,37 @@ app.get("/carts", async (req, resp) => {
 });
 
 // ORDERS
-/*app.get("/orders", async (req, resp) => {
+app.get("/orders", async (req, resp) => {
   console.log("getting orders");
-  const orders = await db.getAllOrders();
-  resp.status(200).json(orders);
-});*/
+  const result = await db.getAllOrders();
+  if (result.orders) {
+    resp.status(200).json(result.orders);
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
+
+app.get("/orders/:id", async (req, resp) => {
+  console.log(`getting order ${req.params.id}`);
+  const result = await db.getOrder(req.params.id);
+  if (result.order) {
+    resp.status(200).json({...result.order});
+  } else if (result.error) {
+    resp.status(500).json({ error: result.error });
+  } else {
+    resp.status(500).json({ error: "Unknown error" });
+  }
+});
 
 // ROOT
 
 app.get("/", checkAuthenticated, async (req, res) => {
-  await db.initializeDatabase();
   res.status(200).send(`All set ${req.user.username}`);
 });
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}...`));
+app.listen(PORT, async () => {
+  await db.initializeDatabase();
+  console.log(`Server started on port ${PORT}...`)
+});

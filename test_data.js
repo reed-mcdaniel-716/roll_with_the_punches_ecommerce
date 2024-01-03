@@ -82,6 +82,7 @@ const product1 = {
   size: "16oz",
   brand: productBrand1,
   color: productColor1,
+  price: 28.00,
   description: `${productBrand1}'s best 160z gloves`,
 };
 
@@ -97,6 +98,7 @@ const product2 = {
   size: "xxl",
   brand: productBrand2,
   color: productColor2,
+  price: 49.99,
   description: `${productBrand2}'s best performing XXL shorts`,
 };
 
@@ -127,20 +129,13 @@ const orderId1 = faker.string.uuid();
 const order1 = {
   id: orderId1,
   user_id: userId1,
-  cart_id: cartId1,
+  cart_id_arr: [cartId1, cartId2],
+  total_cost: 127.98,
   order_date: faker.date.future(),
   is_gift: faker.datatype.boolean(),
 };
 
-const orderId2 = faker.string.uuid();
 
-const order2 = {
-  id: orderId2,
-  user_id: userId2,
-  cart_id: cartId2,
-  order_date: faker.date.future(),
-  is_gift: faker.datatype.boolean(),
-};
 
 module.exports = {
   user1,
@@ -150,5 +145,4 @@ module.exports = {
   cart1,
   cart2,
   order1,
-  order2,
 };

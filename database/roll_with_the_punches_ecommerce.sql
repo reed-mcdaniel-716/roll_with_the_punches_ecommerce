@@ -62,7 +62,8 @@ CREATE TABLE IF NOT EXISTS "carts" (
 CREATE TABLE IF NOT EXISTS "orders" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
   "user_id" uuid UNIQUE NOT NULL,
-  "cart_id" uuid UNIQUE NOT NULL,
+  "cart_id_arr" uuid [] NOT NULL,
+  "total_cost" money NOT NULL,
   "order_date" timestamp NOT NULL DEFAULT NOW(),
   "is_gift" boolean DEFAULT false
 );
@@ -75,8 +76,6 @@ ALTER TABLE "carts"
 ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id") ON DELETE CASCADE;
 ALTER TABLE "orders"
 ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
-ALTER TABLE "orders"
-ADD FOREIGN KEY ("cart_id") REFERENCES "carts" ("id") ON DELETE CASCADE;
 /*
  DROP TABLE orders;
  DROP TABLE carts;
