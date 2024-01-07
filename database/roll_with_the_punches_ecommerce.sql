@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS "carts" (
 );
 CREATE TABLE IF NOT EXISTS "orders" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
-  "user_id" uuid UNIQUE NOT NULL,
+  "user_id" uuid NOT NULL,
   "cart_id_arr" uuid [] NOT NULL,
   "total_cost" money NOT NULL,
   "order_date" timestamp NOT NULL DEFAULT NOW(),

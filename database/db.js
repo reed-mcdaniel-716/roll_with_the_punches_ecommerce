@@ -1,5 +1,5 @@
 const pg = require("pg");
-const _ = require('lodash');
+const _ = require("lodash");
 const {
   user1,
   user2,
@@ -13,11 +13,17 @@ const {
 const constructError = (error, functionName) => {
   const errName = error.name ?? "error";
   const errSeverity = error.severity ?? "ERROR";
-  const errDetail = error.detail ?? error.message ?? `An error has occured in ${functionName}`;
+  const errDetail =
+    error.detail ?? error.message ?? `An error has occured in ${functionName}`;
   const errConstraint = error.constraint ?? null;
-  const err = {name: errName, severity: errSeverity, detail: errDetail, constraint: errConstraint};
+  const err = {
+    name: errName,
+    severity: errSeverity,
+    detail: errDetail,
+    constraint: errConstraint,
+  };
   return err;
-}
+};
 
 const pool = new pg.Pool({
   user: "postgres",
@@ -137,11 +143,11 @@ const getUserByUsername = async (username) => {
       [username]
     );
     const user = result.rows[0];
-    return {user: user, error: null};
+    return { user: user, error: null };
   } catch (err) {
     const errObj = constructError(err, "getUserByUsername");
     console.log(`Error geting user ${username}: ${JSON.stringify(errObj)}`);
-    return {user: null, error: errObj};
+    return { user: null, error: errObj };
   }
 };
 
@@ -151,16 +157,15 @@ const getUserById = async (id) => {
     if (id === undefined) {
       throw new Error("No id provided to getUserById");
     }
-    const result = await pool.query(
-      "select * from users where id = $1::uuid",
-      [id]
-    );
+    const result = await pool.query("select * from users where id = $1::uuid", [
+      id,
+    ]);
     const user = result.rows[0];
-    return {user: user, error: null};
+    return { user: user, error: null };
   } catch (err) {
     const errObj = constructError(err, "getUserById");
     console.log(`Error geting user ${id}: ${JSON.stringify(errObj)}`);
-    return {user: null, error: errObj};
+    return { user: null, error: errObj };
   }
 };
 
@@ -206,7 +211,7 @@ const deleteUser = async (user_id) => {
       "delete from users where id = $1::uuid returning id",
       [user_id]
     );
-    
+
     const id = result.rows[0].id;
     return { user_id: id, error: null };
   } catch (err) {
@@ -238,7 +243,7 @@ const getAllUsers = async () => {
 const createProduct = async (name, size, color, brand, price, description) => {
   try {
     const inputs = [name, size, color, brand, price, description];
-    if(inputs.every((elem) => elem === undefined)){
+    if (inputs.every((elem) => elem === undefined)) {
       throw new Error("No attributes provided for createProduct");
     }
     const result = await pool.query(
@@ -256,7 +261,7 @@ const createProduct = async (name, size, color, brand, price, description) => {
 
 const getProduct = async (product_id) => {
   try {
-    if(product_id === undefined){
+    if (product_id === undefined) {
       throw new Error("No id provided for getProduct");
     }
     const result = await pool.query(
@@ -272,41 +277,48 @@ const getProduct = async (product_id) => {
   }
 };
 
-const updateProduct = async (product_id, name, size, color, brand, price, description) => {
+const updateProduct = async (
+  product_id,
+  name,
+  size,
+  color,
+  brand,
+  price,
+  description
+) => {
   try {
-    if(product_id === undefined){
+    if (product_id === undefined) {
       throw new Error("No product_id provided for updateProduct");
     }
-    const inputs = {name, size, color, brand, price, description};
-    console.log('product update inputs:');
+    const inputs = { name, size, color, brand, price, description };
+    console.log("product update inputs:");
     console.log(inputs);
     const prodAttr = _.omitBy(inputs, _.isUndefined);
-    if (_.isEmpty(prodAttr)){
+    if (_.isEmpty(prodAttr)) {
       throw new Error("No attributes provided for updateProduct");
     }
-    let queryStringPrefix = 'update products set';
+    let queryStringPrefix = "update products set";
     let queryParts = [];
-    for (let key in prodAttr){
-      let sub = '';
-      if(key == 'size'){
+    for (let key in prodAttr) {
+      let sub = "";
+      if (key == "size") {
         sub = `${key} = '${prodAttr[key]}'::product_sizes`;
-      } else if (key == 'color'){
+      } else if (key == "color") {
         sub = `${key} = '${prodAttr[key]}'::product_colors`;
-      } else if (key == 'brand'){
+      } else if (key == "brand") {
         sub = `${key} = '${prodAttr[key]}'::product_brands`;
-      } else if (key == 'price'){
+      } else if (key == "price") {
         sub = `${key} = '${prodAttr[key]}'::float8::numeric::money`;
       } else {
         sub = `${key} = '${prodAttr[key]}'::text`;
       }
       queryParts.push(sub);
     }
-    const queryString = `${queryStringPrefix} ${queryParts.join(', ')} where id = $1::uuid returning id`;
-    console.log(`prod update query string is "${queryString}"`)
-    const result = await pool.query(
-      queryString,
-      [product_id]
-    );
+    const queryString = `${queryStringPrefix} ${queryParts.join(
+      ", "
+    )} where id = $1::uuid returning id`;
+    console.log(`prod update query string is "${queryString}"`);
+    const result = await pool.query(queryString, [product_id]);
     const id = result.rows[0].id;
     return { product_id: id, error: null };
   } catch (err) {
@@ -327,7 +339,7 @@ const deleteProduct = async (product_id) => {
       "delete from products where id = $1::uuid returning id",
       [product_id]
     );
-    
+
     const id = result.rows[0].id;
     return { product_id: id, error: null };
   } catch (err) {
@@ -352,12 +364,12 @@ const getAllProducts = async () => {
 // CARTS
 const createCart = async (user_id, product_id, quantity) => {
   try {
-    if(user_id === undefined || product_id === undefined){
+    if (user_id === undefined || product_id === undefined) {
       throw new Error("user_id or product_id not provided to createCart");
     }
 
     let result;
-    if (quantity !== undefined){
+    if (quantity !== undefined) {
       result = await pool.query(
         "insert into carts (user_id, product_id, quantity) values ($1::uuid, $2::uuid, $3::integer) returning id",
         [user_id, product_id, quantity]
@@ -379,13 +391,12 @@ const createCart = async (user_id, product_id, quantity) => {
 
 const getCart = async (cart_id) => {
   try {
-    if(cart_id === undefined){
+    if (cart_id === undefined) {
       throw new Error("No id provided for getCart");
     }
-    const result = await pool.query(
-      "select * from carts where id = $1::uuid",
-      [cart_id]
-    );
+    const result = await pool.query("select * from carts where id = $1::uuid", [
+      cart_id,
+    ]);
     const cart = result.rows[0];
     return { cart: cart, error: null };
   } catch (err) {
@@ -398,7 +409,7 @@ const getCart = async (cart_id) => {
 // may only update quantity of object in cart
 const updateCart = async (cart_id, quantity) => {
   try {
-    if(cart_id === undefined || quantity === undefined){
+    if (cart_id === undefined || quantity === undefined) {
       throw new Error("No id provided for getCart");
     }
     const result = await pool.query(
@@ -424,7 +435,7 @@ const deleteCart = async (cart_id) => {
       "delete from carts where id = $1::uuid returning id",
       [cart_id]
     );
-    
+
     const id = result.rows[0].id;
     return { cart_id: id, error: null };
   } catch (err) {
@@ -447,23 +458,60 @@ const getAllCarts = async () => {
 };
 
 // checkout pulls together all of a user's carts
-const checkout = async (user_id) => {
-  // collect all carts for a user and compile into an order
-  // remove checked out carts
+const checkout = async (user_id, isGift = false) => {
+  // placing all within a single transaction
+  const client = await pool.connect();
   try {
-    if(cart_id === undefined){
-      throw new Error("No id provided for getCart");
+    if (user_id === undefined) {
+      throw new Error("No user_id provided for checkout");
     }
-    const result = await pool.query(
-      "select * from carts where id = $1::uuid",
-      [cart_id]
+    // begin transaction
+    await client.query("BEGIN");
+    const cartResult = await client.query(
+      "select * from carts where user_id = $1::uuid",
+      [user_id]
     );
-    const cart = result.rows[0];
-    return { cart: cart, error: null };
+    const carts = cartResult.rows;
+    console.log(`user ${user_id}'s carts are: `, carts);
+    const allCartIds = carts.map((cart) => {
+      return cart.id;
+    });
+    const allCosts = await Promise.all(
+      carts.map(async (cart) => {
+        const cartProdRes = await client.query(
+          "select price::numeric::float8 from products where id=$1::uuid",
+          [cart.product_id]
+        );
+        const cartCost =
+          parseFloat(cartProdRes.rows[0].price) * parseInt(cart.quantity);
+
+        return cartCost;
+      })
+    );
+    // aggregate carts to compose an order
+
+    const totalOrderPrice = allCosts.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+
+    const orderResult = await client.query(
+      "insert into orders (user_id, cart_id_arr, total_cost, is_gift) values ($1::uuid, $2::uuid[], $3::float8::numeric::money, $4::boolean) returning id",
+      [user_id, allCartIds, totalOrderPrice, isGift]
+    );
+    await client.query("COMMIT");
+
+    const finalOrder = orderResult.rows[0];
+
+    // remove carts now that order is created
+
+    return { order: finalOrder, error: null };
   } catch (err) {
-    const errObj = constructError(err, "getCart");
-    console.log(`Error getting cart: ${JSON.stringify(errObj)}`);
-    return { cart: null, error: errObj };
+    await client.query("ROLLBACK");
+    const errObj = constructError(err, "checkout");
+    console.log(`Error checking out: ${JSON.stringify(errObj)}`);
+    return { order: null, error: errObj };
+  } finally {
+    client.release();
   }
 };
 
@@ -471,7 +519,7 @@ const checkout = async (user_id) => {
 
 const getOrder = async (order_id) => {
   try {
-    if(order_id === undefined){
+    if (order_id === undefined) {
       throw new Error("No id provided for getOrder");
     }
     const result = await pool.query(

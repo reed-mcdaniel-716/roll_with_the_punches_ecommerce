@@ -133,7 +133,7 @@ paths:
         - carts
     patch:
       summary: Update a cart by ID
-      description: Update a cart by ID
+      description: Update a cart by ID (quantitiy of product only)
       operationId: patch_cart
       parameters:
         - $ref: "#/components/parameters/idParam"
@@ -147,38 +147,22 @@ paths:
         - $ref: "#/components/parameters/idParam"
       tags:
         - carts
-  /carts/{id}/checkout:
+  /checkout/{user_id}:
     summary: Checkout a cart
     post:
       summary: Initiate a checkout transaction
-      description: Initiate a checkout transaction
+      description: Converts all carts for a user into an order
       operationId: post_checkout
-      parameters:
-        - $ref: "#/components/parameters/idParam"
-      tags:
-        - carts
-  /carts/{user_id}:
-    summary: Carts by user ID
-    get:
-      summary: Get all carts for a specific user ID
-      description: Get all carts for a specific user ID
-      operationId: get_carts_for_user
       parameters:
         - $ref: "#/components/parameters/userIdParam"
       tags:
-        - carts
+        - checkout
   /orders:
     summary: order accounts
     get:
       summary: Get all orders
       description: ""
       operationId: get_all_orders
-      tags:
-        - orders
-    post:
-      summary: Create order
-      description: Create order
-      operationId: create_order
       tags:
         - orders
   /orders/{id}:
@@ -189,32 +173,6 @@ paths:
       operationId: get_order
       parameters:
         - $ref: "#/components/parameters/idParam"
-      tags:
-        - orders
-    patch:
-      summary: Update a order by ID
-      description: Update a order by ID
-      operationId: patch_order
-      parameters:
-        - $ref: "#/components/parameters/idParam"
-      tags:
-        - orders
-    delete:
-      summary: Delete order by ID
-      description: Delete order by ID
-      operationId: delete_order
-      parameters:
-        - $ref: "#/components/parameters/idParam"
-      tags:
-        - orders
-  /orders/{user_id}:
-    summary: Orders by user ID
-    get:
-      summary: Get all orders for a specific user
-      description: Get all orders for a specific user
-      operationId: get_orders_for_user
-      parameters:
-        - $ref: "#/components/parameters/userIdParam"
       tags:
         - orders
 components:
