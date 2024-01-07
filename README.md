@@ -2,23 +2,17 @@
 
 - project configured to be run in GutHub Codespaces
 
-## Back-end: Node.js + PostgreSQL
+## Back-end: Express + PostgreSQL
 
 ### Database Schema
 
-![image database schema diagram](./database/roll_with_the_punches_ecommerce.png)
+![image database schema diagram (rough approximation)](./database/roll_with_the_punches_ecommerce.png)
 _generated using dbdiagram.io_
 
 ### API Design
 
 - API documentation can be found at the `/api-docs` endpoint
 
-### Auth
+### Tips
 
-```shell
-curl --data "username=admin&password=password" https://zany-halibut-p6x9ww64jc7w69-3000.app.github.dev/login
-```
-
-## TODO
-
-- start on checkout endpoint
+- To test locally with Postman, grab the `$GITHUB_TOKEN` via the cli in the Codespace, and set it as `X-Github-Token` header in your Postman requests
