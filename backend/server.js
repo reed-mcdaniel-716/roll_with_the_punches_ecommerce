@@ -1,5 +1,5 @@
 // help from: https://medium.com/@prashantramnyc/node-js-with-passport-authentication-simplified-76ca65ee91e5
-const PORT = 3000;
+const PORT = 4000;
 const express = require("express");
 const app = express();
 const db = require("./database/db");
