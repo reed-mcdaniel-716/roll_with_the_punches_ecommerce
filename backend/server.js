@@ -5,10 +5,14 @@ const app = express();
 const db = require("./database/db");
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
+const cors = require("cors");
 
 // LOGGING
 const morgan = require("morgan");
 app.use(morgan("dev"));
+
+// CORS
+app.use(cors());
 
 // AUTH
 
