@@ -1,4 +1,4 @@
-# Roll With The Punches E-Commerce: a mock e-commerce API for a boxing shop
+# Roll With The Punches E-Commerce: a mock e-commerce site for boxing gear
 
 - project configured to be run in GutHub Codespaces
 
