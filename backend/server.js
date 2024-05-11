@@ -427,10 +427,13 @@ app.get("/orders/:id", async (req, resp) => {
 });
 
 // ROOT
-
-app.get("/", checkAuthenticated, async (req, res) => {
-  res.status(200).send(`All set ${req.user.username}`);
+app.get("/", async (_req, res) => {
+  res.redirect("/api-docs");
 });
+
+/*app.get("/", checkAuthenticated, async (req, res) => {
+  res.status(200).send(`All set ${req.user.username}`);
+});*/
 
 app.listen(PORT, async () => {
   await db.initializeDatabase();

@@ -2,20 +2,40 @@
 
 - project configured to be run in GutHub Codespaces
 
-## Back-end: Express + PostgreSQL
+## Set-up
 
-### Database Schema
+### Back-end: Express + PostgreSQL
 
-![image database schema diagram (rough approximation)](./database/roll_with_the_punches_ecommerce.png)
-_generated using dbdiagram.io_
+#### Database Schema
 
-### API Design
+_*coming soon...*_
+
+#### API Design
 
 - API documentation can be found at the `/api-docs` endpoint
 
-## Front-end: React
+### Front-end: React + Chakra UI
 
+## How to run
+
+1. start backend
+
+```shell
+cd backend
+npm install
+npm start
+```
+
+2. start frontend
+
+```shell
+cd frontend
+npm install
+npm start
+```
+
+3. navigate to `localhost:3000` to interact with the UI
 
 ## Tips
 
-- To test locally with Postman, grab the `$GITHUB_TOKEN` via the cli in the Codespace, and set it as `X-Github-Token` header in your Postman requests
+- To test API locally with Postman, grab the `$GITHUB_TOKEN` via the cli in the Codespace, and set it as `X-Github-Token` header in your Postman requests

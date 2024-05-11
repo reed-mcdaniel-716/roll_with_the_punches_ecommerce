@@ -16,7 +16,12 @@ const ProductListings = () => {
     return <ListItem key={idx}>{JSON.stringify(product, null, 2)}</ListItem>;
   });
   return (
-    <Container bg="gray.800" maxWidth="100%" minHeight="100vh" color="gray.300">
+    <Container
+      bg="brand.rich_black"
+      maxWidth="100%"
+      minHeight="100vh"
+      color="whiteAlpha.900"
+    >
       <UnorderedList spacing={3}>{productItems}</UnorderedList>
     </Container>
   );

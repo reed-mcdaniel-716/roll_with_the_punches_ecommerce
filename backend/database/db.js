@@ -1,3 +1,4 @@
+require("dotenv").config();
 const pg = require("pg");
 const _ = require("lodash");
 const {
@@ -26,11 +27,12 @@ const constructError = (error, functionName) => {
 };
 
 const pool = new pg.Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "postgres",
-  password: "postgres",
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+  ssl: true,
 });
 
 const initializeDatabase = async () => {
@@ -39,11 +41,6 @@ const initializeDatabase = async () => {
     await pool.query("truncate table products cascade");
     await pool.query("truncate table carts cascade");
     await pool.query("truncate table orders cascade");
-
-    await pool.query(
-      "insert into users(username, password) values ($1::text, $2::text)",
-      ["admin", "password"]
-    );
 
     await pool.query(
       "insert into users(id, username, password, created_at, updated_at) values ($1::uuid, $2::text, $3::text, $4::timestamp, $5::timestamp), ($6::uuid, $7::text, $8::text, $9::timestamp, $10::timestamp)",
@@ -107,6 +104,7 @@ const initializeDatabase = async () => {
       ]
     );
   } catch (err) {
+    console.log("ERROR:", err);
     const errObj = constructError(err, "initializeDatabase");
     console.log(`Error initializing database: ${JSON.stringify(errObj)}`);
     throw new Error(JSON.stringify(errObj));
