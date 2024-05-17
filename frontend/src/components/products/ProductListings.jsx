@@ -1,4 +1,4 @@
-import { getAllProducts } from '../api/api';
+import { getAllProducts } from '../../api/api';
 import { useState, useEffect } from 'react';
 import { Container, UnorderedList, ListItem } from '@chakra-ui/react';
 
