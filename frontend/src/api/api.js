@@ -3,6 +3,26 @@ const API_ENDPOINT = 'http://localhost:4000';
 
 // Auth
 export const login = async () => {};
+export const logout = async () => {
+  const resp = await fetch(`${API_ENDPOINT}/auth/logout`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  await resp.json();
+};
+export const authWithGoogle = async () => {
+  const resp = await fetch(`${API_ENDPOINT}/auth/google`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  await resp.json();
+};
 
 // Products
 export const getAllProducts = async () => {

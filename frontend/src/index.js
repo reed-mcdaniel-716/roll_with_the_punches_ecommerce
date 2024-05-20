@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './pages/ErrorPage';
 import ProductListings from './components/products/ProductListings';
 import Home from './pages/Home';
+import ProfilePage from './pages/ProfilePage';
 
 // styling
 const theme = extendTheme({
@@ -37,8 +38,8 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: '/products',
-        element: <ProductListings />,
+        path: '/profile',
+        element: <ProfilePage />,
         errorElement: <ErrorPage />,
       },
     ],

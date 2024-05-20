@@ -6,7 +6,7 @@ const db = require("./database/db");
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
 const cors = require("cors");
-const authRouter = require("./auth");
+const authRouter = require("./auth/auth");
 
 // LOGGING
 const morgan = require("morgan");
