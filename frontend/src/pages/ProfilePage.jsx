@@ -42,6 +42,11 @@ const ProfilePage = () => {
           >
             Logout
           </ChakraLink>
+          {/*
+          trying making this a button instead, with a function abstraction
+          button/enter key > onWhatever > api function > server side handling >
+          return resp > navigate to protected page on success in onWhatever
+          */}
           <ChakraLink
             href="http://localhost:4000/auth/google"
             isExternal

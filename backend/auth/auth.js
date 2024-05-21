@@ -22,4 +22,9 @@ authRouter.get("logout", (req, res) => {
   res.send("logging out");
 });
 
+// callback route for google to redirect to
+authRouter.get("/google/redirect", (req, res) => {
+  res.send("you reached the callback uri");
+});
+
 module.exports = authRouter;
