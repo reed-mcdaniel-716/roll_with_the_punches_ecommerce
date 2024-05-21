@@ -43,8 +43,8 @@ const ProfilePage = () => {
             Logout
           </ChakraLink>
           <ChakraLink
-            as={ReactRouterLink}
-            to="/auth/google"
+            href="http://localhost:4000/auth/google"
+            isExternal
             color="whiteAlpha.900"
             fontSize="xl"
             fontWeight="semibold"

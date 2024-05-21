@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 
 const authRouter = express.Router();
 
@@ -6,10 +7,14 @@ const authRouter = express.Router();
 authRouter.get("/login", (req, res) => {});
 
 // auth with google
-authRouter.get("/google", (req, res) => {
-  // handle with passport
-  res.send("logging in with google");
-});
+// configured in passport-setup.js
+authRouter.get(
+  "/google",
+  passport.authenticate("google", {
+    // scopes
+    scope: ["profile"],
+  })
+);
 
 // auth logout
 authRouter.get("logout", (req, res) => {
