@@ -1,32 +1,13 @@
-//TODO: make this dynamic
-const API_ENDPOINT = 'http://localhost:4000';
+require('dotenv').config();
 
 // Auth
 export const login = async () => {};
-export const logout = async () => {
-  const resp = await fetch(`${API_ENDPOINT}/auth/logout`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  await resp.json();
-};
-export const authWithGoogle = async () => {
-  const resp = await fetch(`${API_ENDPOINT}/auth/google`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  await resp.json();
-};
+export const logout = async () => {};
+export const authWithGoogle = async () => {};
 
 // Products
 export const getAllProducts = async () => {
-  const resp = await fetch(`${API_ENDPOINT}/products`, {
+  const resp = await fetch(`${process.env.SERVER_URL}/products`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

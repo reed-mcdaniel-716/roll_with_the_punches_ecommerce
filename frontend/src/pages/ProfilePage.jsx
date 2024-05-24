@@ -1,4 +1,6 @@
 import {
+  Button,
+  ButtonGroup,
   Card,
   CardHeader,
   CardBody,
@@ -11,12 +13,6 @@ import {
 } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import Banner from '../components/Banner';
-
-const onLogoutClick = e => {};
-const onLogoutKeyDown = e => {};
-
-const onGoogleOAuthClick = e => {};
-const onGoogleOAuthKeyDown = e => {};
 
 const ProfilePage = () => {
   return (
@@ -58,11 +54,6 @@ const ProfilePage = () => {
                 >
                   Logout
                 </ChakraLink>
-                {/*
-          trying making this a button instead, with a function abstraction
-          button/enter key > onWhatever > api function > server side handling >
-          return resp > navigate to protected page on success in onWhatever
-          */}
                 <ChakraLink
                   href="http://localhost:4000/auth/google"
                   isExternal
