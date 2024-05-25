@@ -281,11 +281,6 @@ app.get("/", async (_req, res) => {
   res.redirect("/api-docs");
 });
 
-/*app.get("/", checkAuthenticated, async (req, res) => {
-  res.status(200).send(`All set ${req.user.username}`);
-});*/
-
 app.listen(PORT, async () => {
-  await db.initializeDatabase();
   console.log(`Server started on port ${PORT}...`);
 });

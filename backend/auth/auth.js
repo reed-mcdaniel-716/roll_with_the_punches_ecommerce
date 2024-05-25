@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const passport = require("passport");
 
-const CLIENT_URL = "http://localhost:3000";
 const authRouter = express.Router();
 
 // auth login
@@ -25,10 +24,14 @@ authRouter.get("logout", (req, res) => {
 });
 
 // callback route for google to redirect to
-authRouter.get("/google/redirect", (req, res) => {
-  res.redirect(`${process.env.CLIENT_URL}`);
-});
+authRouter.get(
+  "/google/redirect",
+  passport.authenticate("google"),
+  (req, res) => {
+    // add query params to indicate logged in status
+    //res.redirect(`${process.env.CLIENT_URL}`);
+    res.send("you have reached callback redirect uri");
+  }
+);
 
 module.exports = authRouter;
-
-// continue with net ninja ep. 8

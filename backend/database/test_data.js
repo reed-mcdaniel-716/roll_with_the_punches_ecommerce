@@ -55,7 +55,7 @@ const userId1 = faker.string.uuid();
 const user1 = {
   id: userId1,
   username: faker.internet.userName(),
-  password: faker.internet.password(),
+  google_id: faker.string.alphanumeric(20),
   created_at: faker.date.future(),
   updated_at: faker.date.future(),
 };
@@ -64,7 +64,7 @@ const userId2 = faker.string.uuid();
 const user2 = {
   id: userId2,
   username: faker.internet.userName(),
-  password: faker.internet.password(),
+  google_id: faker.string.alphanumeric(20),
   created_at: faker.date.future(),
   updated_at: faker.date.future(),
 };
@@ -82,7 +82,7 @@ const product1 = {
   size: "16oz",
   brand: productBrand1,
   color: productColor1,
-  price: 28.00,
+  price: 28.0,
   description: `${productBrand1}'s best 160z gloves`,
 };
 
@@ -134,8 +134,6 @@ const order1 = {
   order_date: faker.date.future(),
   is_gift: faker.datatype.boolean(),
 };
-
-
 
 module.exports = {
   user1,

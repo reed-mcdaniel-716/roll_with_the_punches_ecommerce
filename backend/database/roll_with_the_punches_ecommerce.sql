@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS carts;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS users;
+
+DROP TYPE IF EXISTS product_sizes;
 CREATE TYPE "product_sizes" AS ENUM (
   '10oz',
   '12oz',
@@ -14,6 +20,8 @@ CREATE TYPE "product_sizes" AS ENUM (
   'xxl',
   'xxxl'
 );
+
+DROP TYPE IF EXISTS product_colors;
 CREATE TYPE "product_colors" AS ENUM (
   'black',
   'red',
@@ -27,6 +35,8 @@ CREATE TYPE "product_colors" AS ENUM (
   'pink',
   'purple'
 );
+
+DROP TYPE IF EXISTS product_brands;
 CREATE TYPE "product_brands" AS ENUM (
   'Everlast',
   'Ringside',
@@ -39,8 +49,8 @@ CREATE TYPE "product_brands" AS ENUM (
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS "users" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
-  "username" varchar(40) UNIQUE NOT NULL,
-  "password" varchar(60) NOT NULL,
+  "username" varchar(100) UNIQUE NOT NULL,
+  "google_id" varchar(100),
   "created_at" timestamp NOT NULL DEFAULT NOW(),
   "updated_at" timestamp NOT NULL DEFAULT NOW()
 );
@@ -76,9 +86,3 @@ ALTER TABLE "carts"
 ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id") ON DELETE CASCADE;
 ALTER TABLE "orders"
 ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
-/*
- DROP TABLE orders;
- DROP TABLE carts;
- DROP TABLE products;
- DROP TABLE users;
- */
