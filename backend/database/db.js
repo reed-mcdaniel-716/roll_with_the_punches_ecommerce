@@ -84,31 +84,45 @@ const getUserById = async (id) => {
   }
 };
 
-const updateUser = async (user_id, username, google_id) => {
+const getUserByGoogleId = async (google_id) => {
+  console.log(`looking for user with google_id: ${google_id}`);
+  try {
+    if (google_id === undefined) {
+      throw new Error("No id provided to getUserByGoogleId");
+    }
+    const result = await pool.query(
+      "select * from users where google_id = $1::text",
+      [google_id]
+    );
+    const user = result.rows[0];
+    return { user: user, error: null };
+  } catch (err) {
+    const errObj = constructError(err, "getUserByGoogleId");
+    console.log(
+      `Error geting user with google_id ${google_id}: ${JSON.stringify(errObj)}`
+    );
+    return { user: null, error: errObj };
+  }
+};
+
+const updateUser = async (user_id) => {
+  // only allow for username updates
   try {
     if (user_id === undefined) {
       throw new Error("No user_id provided to updateUser");
     }
 
-    let result;
-    if (username !== undefined && google_id !== undefined) {
-      result = await pool.query(
-        "update users set username = $1::text, google_id = $2::text, updated_at = now() where id = $3::uuid returning id",
-        [username, google_id, user_id]
-      );
-    } else if (username !== undefined) {
-      result = await pool.query(
-        "update users set username = $1::text, updated_at = now() where id = $2::uuid returning id",
+    if (username !== undefined) {
+      const result = await pool.query(
+        "update users set username = $1::text, updated_at = now() where id = $3::uuid returning id",
         [username, user_id]
       );
-    } else if (google_id !== undefined) {
-      result = await pool.query(
-        "update users set google_id = $1::text, updated_at = now() where id = $2::uuid returning id",
-        [google_id, user_id]
-      );
+      const id = result.rows[0].id;
+      return { user_id: id, error: null };
+    } else {
+      // return havong done nothing
+      return { user_id, error: null };
     }
-    const id = result.rows[0].id;
-    return { user_id: id, error: null };
   } catch (err) {
     const errObj = constructError(err, "updateUser");
     console.log(`Error updating user: ${JSON.stringify(errObj)}`);
@@ -466,6 +480,7 @@ module.exports = {
   createUser,
   getUserById,
   getUserByUsername,
+  getUserByGoogleId,
   updateUser,
   deleteUser,
   createProduct,
