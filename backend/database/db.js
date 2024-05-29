@@ -105,7 +105,7 @@ const getUserByGoogleId = async (google_id) => {
   }
 };
 
-const updateUser = async (user_id) => {
+const updateUser = async (user_id, username) => {
   // only allow for username updates
   try {
     if (user_id === undefined) {
@@ -120,7 +120,7 @@ const updateUser = async (user_id) => {
       const id = result.rows[0].id;
       return { user_id: id, error: null };
     } else {
-      // return havong done nothing
+      // return having done nothing
       return { user_id, error: null };
     }
   } catch (err) {

@@ -8,10 +8,24 @@ const YAML = require("yamljs");
 const authRouter = require("./auth/auth");
 // requiring runs file contents
 const passportSetup = require("./auth/passport-setup");
+const cookieSession = require("cookie-session");
+const passport = require("passport");
 
 // LOGGING
 const morgan = require("morgan");
 app.use(morgan("dev"));
+
+// Cookie + Session config
+app.use(
+  cookieSession({
+    maxAge: 24 * 60 * 60 * 1000, // one day
+    keys: [process.env.COOKIE_SESSION_KEY],
+  })
+);
+
+// initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // AUTH v2
 app.use("/auth", authRouter);
