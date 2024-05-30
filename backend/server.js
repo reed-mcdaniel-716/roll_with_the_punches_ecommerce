@@ -27,6 +27,21 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// fix for known passport + cookie-session issue: https://github.com/jaredhanson/passport/issues/904
+app.use(function (request, response, next) {
+  if (request.session && !request.session.regenerate) {
+    request.session.regenerate = (cb) => {
+      cb();
+    };
+  }
+  if (request.session && !request.session.save) {
+    request.session.save = (cb) => {
+      cb();
+    };
+  }
+  next();
+});
+
 // AUTH v2
 app.use("/auth", authRouter);
 

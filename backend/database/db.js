@@ -114,7 +114,7 @@ const updateUser = async (user_id, username) => {
 
     if (username !== undefined) {
       const result = await pool.query(
-        "update users set username = $1::text, updated_at = now() where id = $3::uuid returning id",
+        "update users set username = $1::text, updated_at = now() where id = $2::uuid returning id",
         [username, user_id]
       );
       const id = result.rows[0].id;

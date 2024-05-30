@@ -7,7 +7,7 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.serializeUser(async (id, done) => {
+passport.deserializeUser(async (id, done) => {
   db.getUserById(id).then((user) => {
     done(null, user);
   });
@@ -56,4 +56,4 @@ passport.use(
   )
 );
 
-// continue with ep. 17 testing cookie usage
+// continue with ep. 18

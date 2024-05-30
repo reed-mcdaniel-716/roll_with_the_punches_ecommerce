@@ -30,7 +30,7 @@ authRouter.get(
   (req, res) => {
     // add query params to indicate logged in status
     //res.redirect(`${process.env.CLIENT_URL}`);
-    res.send("you have reached callback redirect uri");
+    res.send(req.user);
   }
 );
 
