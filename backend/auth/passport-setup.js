@@ -4,10 +4,12 @@ const GoogleStrategy = require("passport-google-oauth20");
 const db = require("../database/db");
 
 passport.serializeUser((user, done) => {
+  console.log("serializing user:", user);
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
+  console.log("desearializing user:", id);
   db.getUserById(id).then((user) => {
     done(null, user);
   });
@@ -17,7 +19,7 @@ passport.use(
   new GoogleStrategy(
     {
       // stategy options
-      callbackURL: "/auth/google/redirect",
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     },
@@ -56,4 +58,4 @@ passport.use(
   )
 );
 
-// continue with ep. 18
+// look at this youtube vid: https://www.youtube.com/watch?v=pGAQlEh7urw

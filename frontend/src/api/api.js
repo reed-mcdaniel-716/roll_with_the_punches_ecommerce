@@ -1,7 +1,4 @@
 // Auth
-export const login = async () => {};
-export const logout = async () => {};
-export const authWithGoogle = async () => {};
 
 // Products
 export const getAllProducts = async () => {

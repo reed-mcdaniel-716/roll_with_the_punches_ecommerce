@@ -8,18 +8,34 @@ const YAML = require("yamljs");
 const authRouter = require("./auth/auth");
 // requiring runs file contents
 const passportSetup = require("./auth/passport-setup");
-const cookieSession = require("cookie-session");
+const session = require("express-session");
+const cors = require("cors");
 const passport = require("passport");
-
-// LOGGING
+const isAuth = require("./auth/isAuth");
 const morgan = require("morgan");
-app.use(morgan("dev"));
 
-// Cookie + Session config
+// Logging + Formatting
+app.use(morgan("dev"));
+app.use(express.json());
+
+// Security + Cookie + Session config
 app.use(
-  cookieSession({
-    maxAge: 24 * 60 * 60 * 1000, // one day
-    keys: [process.env.COOKIE_SESSION_KEY],
+  cors({
+    credentials: true,
+    origin: [process.env.CLIENT_URL, "http://127.0.0.1:3000"],
+  })
+);
+
+app.use(
+  session({
+    secret: process.env.COOKIE_SESSION_KEY,
+    cookie: {
+      secure: process.env.NODE_ENV === "production" ? "true" : "auto",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      //expires: 60 * 60 * 1000,
+    },
+    resave: false,
+    saveUninitialized: false,
   })
 );
 
@@ -27,22 +43,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// fix for known passport + cookie-session issue: https://github.com/jaredhanson/passport/issues/904
-app.use(function (request, response, next) {
-  if (request.session && !request.session.regenerate) {
-    request.session.regenerate = (cb) => {
-      cb();
-    };
-  }
-  if (request.session && !request.session.save) {
-    request.session.save = (cb) => {
-      cb();
-    };
-  }
-  next();
-});
-
-// AUTH v2
+// AUTH
 app.use("/auth", authRouter);
 
 // API DOCS
@@ -51,21 +52,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // USERS
 
-app.post("/signup", async (req, resp) => {
-  console.log(
-    `signing up user ${req.body.username} with password ${req.body.password}`
-  );
-  const result = await db.createUser(req.body.username, req.body.password);
-  if (result.user_id) {
-    resp.status(201).json({ id: result.user_id });
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
-  } else {
-    resp.status(500).json({ error: "Unknown error" });
-  }
-});
-
-app.get("/users", async (req, resp) => {
+app.get("/users", isAuth, async (req, resp) => {
   console.log("getting users");
   const result = await db.getAllUsers();
   if (result.users) {
@@ -77,15 +64,17 @@ app.get("/users", async (req, resp) => {
   }
 });
 
-app.get("/users/:id", async (req, resp) => {
-  console.log(`getting user ${req.params.id}`);
-  const result = await db.getUserById(req.params.id);
-  if (result.user) {
-    resp.status(200).json({ ...result.user });
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
+app.get("/users/current", isAuth, async (req, resp) => {
+  console.log("hit /users/current......");
+  console.log("req:", req);
+  if (req.user) {
+    const user = {
+      ...req.user,
+      loggedIn: true,
+    };
+    resp.status(200).json(user);
   } else {
-    resp.status(500).json({ error: "Unknown error" });
+    resp.status(500).json({ error: "Error getting user" });
   }
 });
 
@@ -306,8 +295,8 @@ app.get("/orders/:id", async (req, resp) => {
 });
 
 // ROOT
-app.get("/", async (_req, res) => {
-  res.redirect("/api-docs");
+app.get("/", async (_req, resp) => {
+  resp.redirect("/api-docs");
 });
 
 app.listen(PORT, async () => {

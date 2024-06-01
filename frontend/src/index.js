@@ -8,7 +8,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './pages/ErrorPage';
 import ProductListings from './components/products/ProductListings';
 import Home from './pages/Home';
+import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
+import Context from './context/UserContext';
 
 // styling
 const theme = extendTheme({
@@ -33,12 +35,16 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: '/',
+        path: '/home',
         element: <Home />,
         errorElement: <ErrorPage />,
       },
     ],
     errorElement: <ErrorPage />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
   },
   {
     path: '/profile',
@@ -53,7 +59,9 @@ root.render(
   <StrictMode>
     <ColorModeScript />
     <ChakraProvider theme={theme}>
-      <RouterProvider router={router} />
+      <Context>
+        <RouterProvider router={router} />
+      </Context>
     </ChakraProvider>
   </StrictMode>
 );

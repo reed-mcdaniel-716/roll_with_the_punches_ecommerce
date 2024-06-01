@@ -4,9 +4,6 @@ const passport = require("passport");
 
 const authRouter = express.Router();
 
-// auth login
-authRouter.get("/login", (req, res) => {});
-
 // auth with google
 // configured in passport-setup.js
 authRouter.get(
@@ -18,19 +15,22 @@ authRouter.get(
 );
 
 // auth logout
-authRouter.get("logout", (req, res) => {
+authRouter.get("logout", (req, resp) => {
   // handle with passport
-  res.send("logging out");
+  req.logout();
+  resp.redirect("/");
 });
 
 // callback route for google to redirect to
 authRouter.get(
-  "/google/redirect",
-  passport.authenticate("google"),
-  (req, res) => {
+  "/google/callback",
+  passport.authenticate("google", { session: true }),
+  (req, resp) => {
+    console.log("hit auth /google/callback");
+    console.log("req:", req);
     // add query params to indicate logged in status
-    //res.redirect(`${process.env.CLIENT_URL}`);
-    res.send(req.user);
+    resp.redirect(`${process.env.CLIENT_URL}/home`);
+    // figure out why it boumces from here to /login
   }
 );
 
