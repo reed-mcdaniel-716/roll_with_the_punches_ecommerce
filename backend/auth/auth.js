@@ -27,10 +27,9 @@ authRouter.get(
   passport.authenticate("google", { session: true }),
   (req, resp) => {
     console.log("hit auth /google/callback");
-    console.log("req:", req);
     // add query params to indicate logged in status
-    resp.redirect(`${process.env.CLIENT_URL}/home`);
-    // figure out why it boumces from here to /login
+    resp.redirect(`${process.env.CLIENT_URL}`);
+    // figure out why it bounces from here to /login
   }
 );
 

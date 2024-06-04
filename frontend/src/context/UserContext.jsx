@@ -1,25 +1,35 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-export const UserContext = createContext();
+const UserContext = createContext();
 
-const Context = ({ children }) => {
-  const [user, setUser] = useState(() => ({
+export const useUserContext = () => {
+  return useContext(UserContext);
+};
+
+export const UserContextProvider = ({ children }) => {
+  const [user, setUser] = useState({
     loggedIn: false,
-  }));
+  });
 
   useEffect(() => {
     console.log('called useeffect in user context...');
-    fetch(`${process.env.REACT_APP_SERVER_URL}/users/current`, {
-      credentials: 'include',
-    })
-      .then(r => r.json())
-      .then(data => {
-        console.log('data from user context:', { ...data });
-        setUser({ ...data });
-      });
+    const fetchUser = () => {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/users/current`, {
+        credentials: 'include',
+      })
+        .then(r => r.json())
+        .then(data => {
+          console.log('data from user context:', { ...data });
+          setUser(_prevUser => {
+            const newUser = { ...data };
+            return newUser;
+          });
+        })
+        .catch(err => console.log('An error occured setting user in context'));
+    };
+
+    fetchUser();
   }, []);
 
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
-
-export default Context;

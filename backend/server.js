@@ -22,7 +22,10 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: [process.env.CLIENT_URL, "http://127.0.0.1:3000"],
+    origin:
+      process.env.NODE_ENV === "dev"
+        ? [process.env.CLIENT_URL, "http://127.0.0.1:3000"]
+        : [],
   })
 );
 
@@ -66,12 +69,15 @@ app.get("/users", isAuth, async (req, resp) => {
 
 app.get("/users/current", isAuth, async (req, resp) => {
   console.log("hit /users/current......");
-  console.log("req:", req);
   if (req.user) {
     const user = {
       ...req.user,
       loggedIn: true,
     };
+    console.log(
+      "in /users/current have user attached to req, crafting response:",
+      user
+    );
     resp.status(200).json(user);
   } else {
     resp.status(500).json({ error: "Error getting user" });

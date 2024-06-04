@@ -10,7 +10,7 @@ import ProductListings from './components/products/ProductListings';
 import Home from './pages/Home';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
-import Context from './context/UserContext';
+import NavBarWrapper from './components/navigation/NavBarWrapper';
 
 // styling
 const theme = extendTheme({
@@ -32,23 +32,28 @@ const theme = extendTheme({
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <NavBarWrapper />,
     children: [
+      {
+        path: '/',
+        element: <App />,
+        errorElement: <ErrorPage />,
+      },
       {
         path: '/home',
         element: <Home />,
         errorElement: <ErrorPage />,
       },
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage />,
+      },
     ],
     errorElement: <ErrorPage />,
-  },
-  {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/profile',
-    element: <ProfilePage />,
   },
 ]);
 
@@ -59,9 +64,7 @@ root.render(
   <StrictMode>
     <ColorModeScript />
     <ChakraProvider theme={theme}>
-      <Context>
-        <RouterProvider router={router} />
-      </Context>
+      <RouterProvider router={router} />
     </ChakraProvider>
   </StrictMode>
 );

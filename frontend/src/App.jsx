@@ -1,16 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import NavBar from './components/navigation/NavBar';
 import { Outlet, Navigate } from 'react-router-dom';
-import { UserContext } from './context/UserContext';
+import { useUserContext } from './context/UserContext';
+import Home from './pages/Home';
 
 function App() {
-  const user = useContext(UserContext);
-  return (
-    <>
-      <NavBar />
-      {user?.loggedIn === true ? <Outlet /> : <Navigate to="/login" />}
-    </>
-  );
+  const user = useUserContext();
+  console.log('user in the <App/> component:', user);
+  return <>{user?.loggedIn === true ? <Home /> : <Navigate to="/login" />}</>;
 }
 
 export default App;
+
+// figure out why the context update is not causing the App to rerender with new user value
