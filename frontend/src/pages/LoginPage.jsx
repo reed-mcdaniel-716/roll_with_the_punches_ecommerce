@@ -9,10 +9,11 @@ import {
   Container,
   Heading,
   VStack,
-  Link as ChakraLink,
+  Spinner,
 } from '@chakra-ui/react';
-import { Link as ReactRouterLink } from 'react-router-dom';
 import Banner from '../components/Banner';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 
 const LoginPage = () => {
   const handleOnClick = e => {
@@ -20,6 +21,16 @@ const LoginPage = () => {
     const url = `${process.env.REACT_APP_SERVER_URL}/auth/google`;
     window.open(url, '_self');
   };
+
+  const { auth, isLoading } = useContext(UserContext);
+
+  console.log('isLoading in PrivateRoute:', isLoading);
+  console.log('auth in PrivateRoute:', auth);
+
+  if (isLoading) {
+    return <Spinner color="whiteAlpha.900" />;
+  }
+
   return (
     <Container bg="brand.rich_black" maxWidth="100%" minHeight="100vh">
       <Center>
@@ -39,36 +50,7 @@ const LoginPage = () => {
             </CardHeader>
             <CardBody>
               <VStack>
-                <ChakraLink
-                  as={ReactRouterLink}
-                  to="/auth/login"
-                  color="whiteAlpha.900"
-                  fontSize="xl"
-                  fontWeight="semibold"
-                  padding={2}
-                >
-                  Login
-                </ChakraLink>
-                <ChakraLink
-                  as={ReactRouterLink}
-                  to="/auth/logout"
-                  color="whiteAlpha.900"
-                  fontSize="xl"
-                  fontWeight="semibold"
-                  padding={2}
-                >
-                  Logout
-                </ChakraLink>
-                <ChakraLink
-                  href="http://localhost:4000/auth/google"
-                  color="whiteAlpha.900"
-                  fontSize="xl"
-                  fontWeight="semibold"
-                  padding={2}
-                >
-                  Login with Google
-                </ChakraLink>
-                <Button onClick={handleOnClick}>Login</Button>
+                <Button onClick={handleOnClick}>Google Login</Button>
               </VStack>
             </CardBody>
           </Card>

@@ -1,15 +1,39 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
 import NavBar from './components/navigation/NavBar';
-import { Outlet, Navigate } from 'react-router-dom';
-import { useUserContext } from './context/UserContext';
-import Home from './pages/Home';
+import PrivateRoute from './components/navigation/PrivateRoute';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import { theme } from './theme';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+import { UserContext } from './context/UserContext';
+import ErrorPage from './pages/ErrorPage';
 
-function App() {
-  const user = useUserContext();
-  console.log('user in the <App/> component:', user);
-  return <>{user?.loggedIn === true ? <Home /> : <Navigate to="/login" />}</>;
-}
+const App = () => {
+  const { auth } = useContext(UserContext);
+  return (
+    <>
+      <ColorModeScript />
+      <ChakraProvider theme={theme}>
+        <Router>
+          <NavBar />
+          <Routes>
+            <Route element={<PrivateRoute />}>
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/home" element={<HomePage user={auth?.user} />} />
+            </Route>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </Router>
+      </ChakraProvider>
+    </>
+  );
+};
 
 export default App;
-
-// figure out why the context update is not causing the App to rerender with new user value
