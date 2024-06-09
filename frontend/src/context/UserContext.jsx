@@ -9,13 +9,11 @@ export const UserContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log('called useeffect in user context...');
     fetch(`${process.env.REACT_APP_SERVER_URL}/users/current`, {
       credentials: 'include',
     })
       .then(r => r.json())
       .then(data => {
-        console.log('data from auth context:', { ...data });
         setAuth({ ...data });
       })
       .then(() => setIsLoading(false))

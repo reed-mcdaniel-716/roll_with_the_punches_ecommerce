@@ -24,9 +24,6 @@ const LoginPage = () => {
 
   const { auth, isLoading } = useContext(UserContext);
 
-  console.log('isLoading in PrivateRoute:', isLoading);
-  console.log('auth in PrivateRoute:', auth);
-
   if (isLoading) {
     return <Spinner color="whiteAlpha.900" />;
   }
@@ -50,7 +47,12 @@ const LoginPage = () => {
             </CardHeader>
             <CardBody>
               <VStack>
-                <Button onClick={handleOnClick}>Google Login</Button>
+                <Button
+                  onClick={handleOnClick}
+                  _hover={{ bg: 'brand.rich_black', color: 'whiteAlpha.900' }}
+                >
+                  Google Login
+                </Button>
               </VStack>
             </CardBody>
           </Card>

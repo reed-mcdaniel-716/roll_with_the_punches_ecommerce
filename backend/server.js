@@ -71,7 +71,7 @@ app.get("/users/current", isAuth, async (req, resp) => {
   console.log("hit /users/current......");
   if (req.user) {
     const user = {
-      ...req.user,
+      user: { ...req.user },
       loggedIn: true,
     };
     console.log(

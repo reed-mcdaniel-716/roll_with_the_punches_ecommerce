@@ -46,6 +46,17 @@ CREATE TYPE "product_brands" AS ENUM (
   'Fairtex',
   'Title'
 );
+
+DROP TYPE IF EXISTS product_categories;
+CREATE TYPE "product_categories" AS ENUM (
+  'gloves',
+  'wraps',
+  'bag',
+  't-shirt',
+  'shorts',
+  'hoodie'
+);
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS "users" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
@@ -60,7 +71,8 @@ CREATE TABLE IF NOT EXISTS "products" (
   "size" product_sizes NOT NULL,
   "color" product_colors NOT NULL,
   "brand" product_brands NOT NULL,
-  "price" money NOT NULL DEFAULT 10.00,
+  "category" product_categories NOT NULL,
+  "price" money NOT NULL DEFAULT 20.00,
   "description" varchar(1000)
 );
 CREATE TABLE IF NOT EXISTS "carts" (

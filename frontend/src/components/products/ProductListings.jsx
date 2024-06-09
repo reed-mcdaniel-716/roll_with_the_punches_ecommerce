@@ -1,6 +1,7 @@
 import { getAllProducts } from '../../api/api';
 import { useState, useEffect } from 'react';
-import { Container, UnorderedList, ListItem } from '@chakra-ui/react';
+import { Container, SimpleGrid } from '@chakra-ui/react';
+import ProductCard from './ProductCard';
 
 const ProductListings = () => {
   const [products, setProducts] = useState([]);
@@ -12,18 +13,15 @@ const ProductListings = () => {
     }
     loadProducts();
   }, []);
-  const productItems = products.map((product, idx) => {
-    return <ListItem key={idx}>{JSON.stringify(product, null, 2)}</ListItem>;
+
+  const productCards = products.map((product, idx) => {
+    return <ProductCard key={idx} product={product} />;
   });
+
   return (
-    <Container
-      bg="brand.rich_black"
-      maxWidth="100%"
-      minHeight="100vh"
-      color="whiteAlpha.900"
-    >
-      <UnorderedList spacing={3}>{productItems}</UnorderedList>
-    </Container>
+    <SimpleGrid columns={3} spacing={4}>
+      {productCards}
+    </SimpleGrid>
   );
 };
 

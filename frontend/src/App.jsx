@@ -13,6 +13,7 @@ import {
 } from 'react-router-dom';
 import { UserContext } from './context/UserContext';
 import ErrorPage from './pages/ErrorPage';
+import ProductDetails from './components/products/ProductDetails';
 
 const App = () => {
   const { auth } = useContext(UserContext);
@@ -26,6 +27,7 @@ const App = () => {
             <Route element={<PrivateRoute />}>
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<HomePage user={auth?.user} />} />
+              <Route path="/products/:id" element={<ProductDetails />} />
             </Route>
             <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<ErrorPage />} />

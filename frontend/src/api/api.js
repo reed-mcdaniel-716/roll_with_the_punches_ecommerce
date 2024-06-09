@@ -12,3 +12,18 @@ export const getAllProducts = async () => {
   const products = await resp.json();
   return products;
 };
+
+export const getProductById = async id => {
+  const resp = await fetch(
+    `${process.env.REACT_APP_SERVER_URL}/products/${id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  const product = await resp.json();
+  return product;
+};

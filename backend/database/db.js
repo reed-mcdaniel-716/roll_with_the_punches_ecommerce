@@ -169,14 +169,22 @@ const getAllUsers = async () => {
 };
 
 // PRODUCTS
-const createProduct = async (name, size, color, brand, price, description) => {
+const createProduct = async (
+  name,
+  size,
+  color,
+  brand,
+  price,
+  description,
+  category
+) => {
   try {
-    const inputs = [name, size, color, brand, price, description];
+    const inputs = [name, size, color, brand, price, description, category];
     if (inputs.every((elem) => elem === undefined)) {
       throw new Error("No attributes provided for createProduct");
     }
     const result = await pool.query(
-      "insert into products (name, size, color, brand, price, description) values ($1::text, $2::product_sizes, $3::product_colors, $4::product_brands, $5::float8::numeric::money, $6::text) returning id",
+      "insert into products (name, size, color, brand, price, description, category) values ($1::text, $2::product_sizes, $3::product_colors, $4::product_brands, $5::float8::numeric::money, $6::text, $7::product_categories) returning id",
       [...inputs]
     );
     const id = result.rows[0].id;

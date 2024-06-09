@@ -6,9 +6,6 @@ import { Spinner } from '@chakra-ui/react';
 const PrivateRoute = ({ children }) => {
   const { auth, isLoading } = useContext(UserContext);
 
-  console.log('isLoading in PrivateRoute:', isLoading);
-  console.log('auth in PrivateRoute:', auth);
-
   if (isLoading) {
     return <Spinner color="whiteAlpha.900" />;
   }

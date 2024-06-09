@@ -10,8 +10,8 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   console.log("desearializing user:", id);
-  db.getUserById(id).then((user) => {
-    done(null, user);
+  db.getUserById(id).then((result) => {
+    done(null, result.user);
   });
 });
 
@@ -41,9 +41,9 @@ passport.use(
             async (result1) => {
               if (result1.user_id) {
                 // user created successfully
-                const newUser = await db.getUserById(result1.user_id);
-                console.log("created new user: ", newUser);
-                done(null, newUser);
+                const result2 = await db.getUserById(result1.user_id);
+                console.log("created new user: ", result2.user);
+                done(null, result2.user);
               } else {
                 throw new Error(result1.error);
               }
