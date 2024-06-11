@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getProductById } from '../../api/api';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  Center,
+  Heading,
+} from '@chakra-ui/react';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -14,7 +22,24 @@ const ProductDetails = () => {
     getProduct(id);
   }, [id]);
 
-  return <p>{JSON.stringify(product, null, 2)}</p>;
+  return (
+    <Center>
+      <Card
+        bg="whiteAlpha.900"
+        my={8}
+        align="center"
+        borderWidth={4}
+        borderColor="brand.vista_blue"
+      >
+        <CardHeader>
+          <Heading color="brand.magenta_dye" as="h1" size="xl">
+            {product.name}
+          </Heading>
+        </CardHeader>
+        <CardBody></CardBody>
+      </Card>
+    </Center>
+  );
 };
 
 export default ProductDetails;
