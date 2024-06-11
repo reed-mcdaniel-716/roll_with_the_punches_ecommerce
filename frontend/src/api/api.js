@@ -27,3 +27,7 @@ export const getProductById = async id => {
   const product = await resp.json();
   return product;
 };
+
+export const updateCart = async (product, quantity) => {
+  // TODO: update current user cart
+};

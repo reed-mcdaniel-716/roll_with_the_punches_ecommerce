@@ -150,24 +150,6 @@ const deleteUser = async (user_id) => {
   }
 };
 
-// TODO
-//const getAllUserCarts = async (user_id) => {};
-
-// TODO
-//const getAllUserOrders = async (user_id) => {};
-
-const getAllUsers = async () => {
-  try {
-    const result = await pool.query("select * from users");
-    const users = result.rows;
-    return { users: users, error: null };
-  } catch (err) {
-    const errObj = constructError(err, "getAllUsers");
-    console.log(`Error getting all users: ${JSON.stringify(errObj)}`);
-    return { users: null, error: errObj };
-  }
-};
-
 // PRODUCTS
 const createProduct = async (
   name,
@@ -211,78 +193,6 @@ const getProduct = async (product_id) => {
     const errObj = constructError(err, "getProduct");
     console.log(`Error getting product: ${JSON.stringify(errObj)}`);
     return { product: null, error: errObj };
-  }
-};
-
-const updateProduct = async (
-  product_id,
-  name,
-  size,
-  color,
-  brand,
-  price,
-  description
-) => {
-  try {
-    if (product_id === undefined) {
-      throw new Error("No product_id provided for updateProduct");
-    }
-    const inputs = { name, size, color, brand, price, description };
-    console.log("product update inputs:");
-    console.log(inputs);
-    const prodAttr = _.omitBy(inputs, _.isUndefined);
-    if (_.isEmpty(prodAttr)) {
-      throw new Error("No attributes provided for updateProduct");
-    }
-    let queryStringPrefix = "update products set";
-    let queryParts = [];
-    for (let key in prodAttr) {
-      let sub = "";
-      if (key == "size") {
-        sub = `${key} = '${prodAttr[key]}'::product_sizes`;
-      } else if (key == "color") {
-        sub = `${key} = '${prodAttr[key]}'::product_colors`;
-      } else if (key == "brand") {
-        sub = `${key} = '${prodAttr[key]}'::product_brands`;
-      } else if (key == "price") {
-        sub = `${key} = '${prodAttr[key]}'::float8::numeric::money`;
-      } else {
-        sub = `${key} = '${prodAttr[key]}'::text`;
-      }
-      queryParts.push(sub);
-    }
-    const queryString = `${queryStringPrefix} ${queryParts.join(
-      ", "
-    )} where id = $1::uuid returning id`;
-    console.log(`prod update query string is "${queryString}"`);
-    const result = await pool.query(queryString, [product_id]);
-    const id = result.rows[0].id;
-    return { product_id: id, error: null };
-  } catch (err) {
-    const errObj = constructError(err, "updateProduct");
-    console.log(`Error updating product: ${JSON.stringify(errObj)}`);
-    console.log(err);
-    return { product_id: null, error: errObj };
-  }
-};
-
-const deleteProduct = async (product_id) => {
-  try {
-    if (product_id === undefined) {
-      throw new Error("No product_id provided to deleteProduct");
-    }
-
-    const result = await pool.query(
-      "delete from products where id = $1::uuid returning id",
-      [product_id]
-    );
-
-    const id = result.rows[0].id;
-    return { product_id: id, error: null };
-  } catch (err) {
-    const errObj = constructError(err, "deleteProduct");
-    console.log(`Error deleting product: ${JSON.stringify(errObj)}`);
-    return { product_id: null, error: errObj };
   }
 };
 
@@ -344,6 +254,7 @@ const getCart = async (cart_id) => {
 };
 
 // may only update quantity of object in cart
+// TODO: change to take product ID and user ID, and fully manage cart insert, update, and delete
 const updateCart = async (cart_id, quantity) => {
   try {
     if (cart_id === undefined || quantity === undefined) {
@@ -484,6 +395,8 @@ const getAllOrders = async () => {
   }
 };
 
+// TODO: get all orders for user
+
 module.exports = {
   createUser,
   getUserById,
@@ -493,15 +406,12 @@ module.exports = {
   deleteUser,
   createProduct,
   getProduct,
-  updateProduct,
-  deleteProduct,
   createCart,
   getCart,
   updateCart,
   deleteCart,
   checkout,
   getOrder,
-  getAllUsers,
   getAllProducts,
   getAllCarts,
   getAllOrders,
