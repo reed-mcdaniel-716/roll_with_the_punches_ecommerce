@@ -56,6 +56,7 @@ const ProductListings = () => {
         alt="Select a product category"
         onChange={handleOnChange}
         bg="whiteAlpha.900"
+        size="lg"
       >
         {productOptions}
       </Select>

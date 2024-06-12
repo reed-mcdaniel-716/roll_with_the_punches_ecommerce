@@ -9,6 +9,9 @@ export const UserContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    console.log(
+      `fetching user in useeffect from ${process.env.REACT_APP_SERVER_URL}/users/current`
+    );
     fetch(`${process.env.REACT_APP_SERVER_URL}/users/current`, {
       credentials: 'include',
     })

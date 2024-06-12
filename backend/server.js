@@ -84,25 +84,7 @@ app.get("/users/current", isAuth, async (req, resp) => {
   }
 });
 
-app.patch("/users/:id", async (req, resp) => {
-  console.log(
-    `updating user ${req.params.id} with username ${req.body.username} and password ${req.body.password}`
-  );
-  const result = await db.updateUser(
-    req.params.id,
-    req.body.username,
-    req.body.password
-  );
-  if (result.user_id) {
-    resp.status(200).json({ id: result.user_id });
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
-  } else {
-    resp.status(500).json({ error: "Unknown error" });
-  }
-});
-
-app.delete("/users/:id", async (req, resp) => {
+app.delete("/users/:id", isAuth, async (req, resp) => {
   console.log(`deleting user ${req.params.id}`);
   const result = await db.deleteUser(req.params.id);
   if (result.user_id) {
@@ -115,7 +97,7 @@ app.delete("/users/:id", async (req, resp) => {
 });
 
 // PRODUCTS
-app.get("/products", async (req, resp) => {
+app.get("/products", isAuth, async (req, resp) => {
   console.log("getting products");
   const result = await db.getAllProducts();
   if (result.products) {
@@ -127,27 +109,7 @@ app.get("/products", async (req, resp) => {
   }
 });
 
-app.post("/products", async (req, resp) => {
-  console.log(`creating product with attributes: `);
-  console.log(req.body);
-  const result = await db.createProduct(
-    req.body.name,
-    req.body.size,
-    req.body.color,
-    req.body.brand,
-    req.body.price,
-    req.body.description
-  );
-  if (result.product_id) {
-    resp.status(201).json({ id: result.product_id });
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
-  } else {
-    resp.status(500).json({ error: "Unknown error" });
-  }
-});
-
-app.get("/products/:id", async (req, resp) => {
+app.get("/products/:id", isAuth, async (req, resp) => {
   console.log(`getting product ${req.params.id}`);
   const result = await db.getProduct(req.params.id);
   if (result.product) {
@@ -159,51 +121,19 @@ app.get("/products/:id", async (req, resp) => {
   }
 });
 
-app.patch("/products/:id", async (req, resp) => {
-  console.log(`updating product ${req.params.id} with attributes: `);
-  console.log(req.body);
-  const result = await db.updateProduct(
-    req.params.id,
-    req.body.name,
-    req.body.size,
-    req.body.color,
-    req.body.brand,
-    req.body.price,
-    req.body.description
-  );
-  if (result.product_id) {
-    resp.status(200).json({ id: result.product_id });
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
-  } else {
-    resp.status(500).json({ error: "Unknown error" });
-  }
-});
-
-app.delete("/products/:id", async (req, resp) => {
-  console.log(`deleting product ${req.params.id}`);
-  const result = await db.deleteProduct(req.params.id);
-  if (result.product_id) {
-    resp.status(200).json({ id: result.product_id });
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
-  } else {
-    resp.status(500).json({ error: "Unknown error" });
-  }
-});
-
 // CARTS
 
-app.post("/carts", async (req, resp) => {
-  console.log(`creating cart with attributes: `);
+app.post("/carts/manage", isAuth, async (req, resp) => {
+  console.log(`managing cart with attributes: `);
   console.log(req.body);
-  const result = await db.createCart(
+  const result = await db.manageCart(
     req.body.user_id,
     req.body.product_id,
     req.body.quantity
   );
-  if (result.cart_id) {
-    resp.status(201).json({ id: result.cart_id });
+  console.log("cart result serverside:", result);
+  if (!result.error) {
+    resp.status(200).json({ id: result.cart_id });
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {
@@ -211,7 +141,7 @@ app.post("/carts", async (req, resp) => {
   }
 });
 
-app.get("/carts/:id", async (req, resp) => {
+app.get("/carts/:id", isAuth, async (req, resp) => {
   console.log(`getting cart ${req.params.id}`);
   const result = await db.getCart(req.params.id);
   if (result.cart) {
@@ -223,20 +153,7 @@ app.get("/carts/:id", async (req, resp) => {
   }
 });
 
-app.patch("/carts/:id", async (req, resp) => {
-  console.log(`updating cart ${req.params.id} with attributes: `);
-  console.log(req.body);
-  const result = await db.updateCart(req.params.id, req.body.quantity);
-  if (result.cart_id) {
-    resp.status(200).json({ id: result.cart_id });
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
-  } else {
-    resp.status(500).json({ error: "Unknown error" });
-  }
-});
-
-app.delete("/carts/:id", async (req, resp) => {
+app.delete("/carts/:id", isAuth, async (req, resp) => {
   console.log(`deleting cart ${req.params.id}`);
   const result = await db.deleteCart(req.params.id);
   if (result.cart_id) {
@@ -248,7 +165,7 @@ app.delete("/carts/:id", async (req, resp) => {
   }
 });
 
-app.get("/carts", async (req, resp) => {
+app.get("/carts", isAuth, async (req, resp) => {
   console.log("getting carts");
   const result = await db.getAllCarts();
   if (result.carts) {
@@ -261,7 +178,7 @@ app.get("/carts", async (req, resp) => {
 });
 
 // CHECKOUT
-app.post("/checkout/:user_id", async (req, resp) => {
+app.post("/checkout/:user_id", isAuth, async (req, resp) => {
   console.log(
     `checking out for user ${req.params.user_id} and that it is a gift is ${req.body.is_gift}`
   );
@@ -276,7 +193,7 @@ app.post("/checkout/:user_id", async (req, resp) => {
 });
 
 // ORDERS
-app.get("/orders", async (req, resp) => {
+app.get("/orders", isAuth, async (req, resp) => {
   console.log("getting orders");
   const result = await db.getAllOrders();
   if (result.orders) {
@@ -288,7 +205,7 @@ app.get("/orders", async (req, resp) => {
   }
 });
 
-app.get("/orders/:id", async (req, resp) => {
+app.get("/orders/:id", isAuth, async (req, resp) => {
   console.log(`getting order ${req.params.id}`);
   const result = await db.getOrder(req.params.id);
   if (result.order) {

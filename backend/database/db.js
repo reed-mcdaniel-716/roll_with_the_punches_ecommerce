@@ -209,66 +209,66 @@ const getAllProducts = async () => {
 };
 
 // CARTS
-const createCart = async (user_id, product_id, quantity) => {
-  try {
-    if (user_id === undefined || product_id === undefined) {
-      throw new Error("user_id or product_id not provided to createCart");
-    }
-
-    let result;
-    if (quantity !== undefined) {
-      result = await pool.query(
-        "insert into carts (user_id, product_id, quantity) values ($1::uuid, $2::uuid, $3::integer) returning id",
-        [user_id, product_id, quantity]
-      );
-    } else {
-      result = await pool.query(
-        "insert into carts (user_id, product_id) values ($1::uuid, $2::uuid) returning id",
-        [user_id, product_id]
-      );
-    }
-    const id = result.rows[0].id;
-    return { cart_id: id, error: null };
-  } catch (err) {
-    const errObj = constructError(err, "createCart");
-    console.log(`Error creating cart: ${JSON.stringify(errObj)}`);
-    return { cart_id: null, error: errObj };
-  }
-};
-
-const getCart = async (cart_id) => {
-  try {
-    if (cart_id === undefined) {
-      throw new Error("No id provided for getCart");
-    }
-    const result = await pool.query("select * from carts where id = $1::uuid", [
-      cart_id,
-    ]);
-    const cart = result.rows[0];
-    return { cart: cart, error: null };
-  } catch (err) {
-    const errObj = constructError(err, "getCart");
-    console.log(`Error getting cart: ${JSON.stringify(errObj)}`);
-    return { cart: null, error: errObj };
-  }
-};
 
 // may only update quantity of object in cart
-// TODO: change to take product ID and user ID, and fully manage cart insert, update, and delete
-const updateCart = async (cart_id, quantity) => {
+const manageCart = async (user_id, product_id, quantity) => {
   try {
-    if (cart_id === undefined || quantity === undefined) {
-      throw new Error("No id provided for getCart");
+    if (product_id === undefined) {
+      throw new Error("No product_id provided for manageCart");
+    } else if (user_id === undefined) {
+      throw new Error("No user_id provided for manageCart");
+    } else if (quantity === undefined) {
+      throw new Error("No quantity provided for manageCart");
     }
+
+    // check if quantity is non-zero
+    const numericQuantity = parseInt(quantity);
+    const zeroQuantity = numericQuantity === 0;
+
+    // check for existing cart entry
     const result = await pool.query(
-      "update carts set quantity = $1::integer where id = $2::uuid returning id",
-      [quantity, cart_id]
+      "select * from carts where product_id = $1::uuid and user_id = $2::uuid",
+      [product_id, user_id]
     );
-    const id = result.rows[0].id;
-    return { cart_id: id, error: null };
+
+    if (result.rows.length === 0) {
+      // if cart entry does not exist and quantity is zero, do nothing
+      if (zeroQuantity) {
+        return { cart_id: null, error: null };
+      } else {
+        // if cart entry does not exist and quantity is non-zero, create cart
+        const newResult = await pool.query(
+          "insert into carts (user_id, product_id, quantity) values ($1::uuid, $2::uuid, $3::integer) returning id",
+          [user_id, product_id, quantity]
+        );
+
+        const id = newResult.rows[0].id;
+        return { cart_id: id, error: null };
+      }
+    } else {
+      const existingCart = result.rows[0];
+      // if cart entry exists and new quantity is zero, delete cart
+      if (zeroQuantity) {
+        const newResult = await pool.query(
+          "delete from carts where id = $1::uuid returning id",
+          [existingCart.id]
+        );
+
+        const id = newResult.rows[0].id;
+        return { cart_id: id, error: null };
+      } else {
+        // if cart entry exsits and new quanity is no-zero, update cart
+        const newResult = await pool.query(
+          "update carts set quantity = $1::integer where id = $2::uuid returning id",
+          [numericQuantity, existingCart.id]
+        );
+        const id = newResult.rows[0].id;
+        return { cart_id: id, error: null };
+      }
+    }
   } catch (err) {
-    const errObj = constructError(err, "updateCart");
-    console.log(`Error updating cart: ${JSON.stringify(errObj)}`);
+    const errObj = constructError(err, "manageCart");
+    console.log(`Error managing cart: ${JSON.stringify(errObj)}`);
     return { cart_id: null, error: errObj };
   }
 };
@@ -406,9 +406,7 @@ module.exports = {
   deleteUser,
   createProduct,
   getProduct,
-  createCart,
-  getCart,
-  updateCart,
+  manageCart,
   deleteCart,
   checkout,
   getOrder,

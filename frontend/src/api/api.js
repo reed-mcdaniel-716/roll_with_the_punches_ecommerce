@@ -7,6 +7,7 @@ export const getAllProducts = async () => {
     headers: {
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
   });
 
   const products = await resp.json();
@@ -21,6 +22,7 @@ export const getProductById = async id => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     }
   );
 
@@ -28,6 +30,18 @@ export const getProductById = async id => {
   return product;
 };
 
-export const updateCart = async (product, quantity) => {
-  // TODO: update current user cart
+export const manageCart = async (user_id, product_id, quantity) => {
+  const resp = await fetch(`${process.env.REACT_APP_SERVER_URL}/carts/manage`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({ user_id, product_id, quantity }),
+  });
+
+  console.log('cart response raw:', JSON.stringify(resp));
+  const cart = await resp.json();
+  console.log('cart result:', JSON.stringify(cart));
+  return cart;
 };
