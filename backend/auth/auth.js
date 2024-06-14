@@ -15,10 +15,13 @@ authRouter.get(
 );
 
 // auth logout
-authRouter.get("logout", (req, resp) => {
-  // handle with passport
-  req.logout();
-  resp.redirect("/");
+authRouter.post("/logout", function (req, resp, next) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    resp.redirect(`${process.env.CLIENT_URL}`);
+  });
 });
 
 // callback route for google to redirect to
@@ -26,9 +29,7 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", { session: true }),
   (req, resp) => {
-    // add query params to indicate logged in status
     resp.redirect(`${process.env.CLIENT_URL}`);
-    // figure out why it bounces from here to /login
   }
 );
 

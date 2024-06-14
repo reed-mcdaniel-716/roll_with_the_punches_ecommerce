@@ -43,8 +43,8 @@ const ProductDetails = () => {
 
   const handleOnClick = async e => {
     e.preventDefault();
-    const cart = await manageCart(currentUser.id, id, count);
-    if (cart.cart_id) {
+    const cart_result = await manageCart(currentUser.id, id, count);
+    if (cart_result.id) {
       setSuccessfulCartUpdate(true);
     } else {
       setUnsuccessfulCartUpdate(true);
@@ -76,9 +76,9 @@ const ProductDetails = () => {
         {successfulCartUpdate && (
           <Alert status="success">
             <AlertIcon />
-            <AlertTitle>Cart was not updated successfully</AlertTitle>
+            <AlertTitle>Cart was updated successfully</AlertTitle>
             <AlertDescription>
-              Please refresh the page and try again
+              Continue shopping or head to checkout
             </AlertDescription>
           </Alert>
         )}

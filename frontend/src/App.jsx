@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import NavBar from './components/navigation/NavBar';
@@ -11,12 +11,11 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import { UserContext } from './context/UserContext';
 import ErrorPage from './pages/ErrorPage';
 import ProductDetails from './components/products/ProductDetails';
+import ProfilePage from './pages/ProfilePage';
 
 const App = () => {
-  const { auth } = useContext(UserContext);
   return (
     <>
       <ColorModeScript />
@@ -26,8 +25,9 @@ const App = () => {
           <Routes>
             <Route element={<PrivateRoute />}>
               <Route path="/" element={<Navigate to="/home" replace />} />
-              <Route path="/home" element={<HomePage user={auth?.user} />} />
+              <Route path="/home" element={<HomePage />} />
               <Route path="/products/:id" element={<ProductDetails />} />
+              <Route path="/profile" element={<ProfilePage />} />
             </Route>
             <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<ErrorPage />} />
