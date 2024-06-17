@@ -12,14 +12,17 @@ import {
 } from '@chakra-ui/react';
 import Banner from '../components/Banner';
 import { logout } from '../api/api';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
   const { auth } = useContext(UserContext);
   const currentUser = auth?.user;
+  //const navigate = useNavigate();
 
   const handleLogout = async e => {
     e.preventDefault();
     await logout();
+    //navigate(`/`);
   };
   return (
     <Container bg="brand.rich_black" maxWidth="100%" minHeight="100vh">

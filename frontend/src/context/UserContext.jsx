@@ -17,6 +17,7 @@ export const UserContextProvider = ({ children }) => {
     })
       .then(r => r.json())
       .then(data => {
+        console.log('Auth data:', data);
         setAuth({ ...data });
       })
       .then(() => setIsLoading(false))

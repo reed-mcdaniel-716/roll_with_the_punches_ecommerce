@@ -22,13 +22,15 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    methods: ["GET", "POST"],
     origin:
       process.env.NODE_ENV === "dev"
-        ? [process.env.CLIENT_URL, "http://127.0.0.1:3000"]
+        ? [process.env.CLIENT_URL, process.env.CLIENT_IP_URL]
         : [],
   })
 );
+
+// CORS enables for pre-flight reqs
+app.options("*", cors());
 
 app.use(
   session({

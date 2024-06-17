@@ -16,11 +16,16 @@ authRouter.get(
 
 // auth logout
 authRouter.post("/logout", function (req, resp, next) {
+  // https://www.initialapps.com/properly-logout-passportjs-express-session-for-single-page-app/
+  // keep trying
+
+  resp.clearCookie("connect.sid");
   req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    resp.redirect(`${process.env.CLIENT_URL}`);
+    console.log(err);
+    req.session.destroy(function (err) {
+      // destroys the session
+      resp.send();
+    });
   });
 });
 
