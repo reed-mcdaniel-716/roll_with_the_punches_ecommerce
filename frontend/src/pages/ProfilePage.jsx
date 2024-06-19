@@ -15,14 +15,15 @@ import { logout } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
-  const { auth } = useContext(UserContext);
+  const { auth, setAuth } = useContext(UserContext);
   const currentUser = auth?.user;
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogout = async e => {
     e.preventDefault();
-    await logout();
-    //navigate(`/`);
+    const logoutResp = await logout();
+    setAuth(logoutResp);
+    navigate('/login');
   };
   return (
     <Container bg="brand.rich_black" maxWidth="100%" minHeight="100vh">

@@ -1,6 +1,6 @@
 // Auth
 export const logout = async () => {
-  await fetch(`${process.env.REACT_APP_SERVER_URL}/auth/logout`, {
+  const resp = await fetch(`${process.env.REACT_APP_SERVER_URL}/auth/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -8,6 +8,10 @@ export const logout = async () => {
     // from MDN: Browsers should not send credentials in preflight requests irrespective of this setting.
     credentials: 'omit',
   });
+
+  const auth = await resp.json();
+  console.log('logout response:', auth);
+  return auth;
 };
 
 // Products

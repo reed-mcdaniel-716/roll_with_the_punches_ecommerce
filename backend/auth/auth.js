@@ -16,17 +16,11 @@ authRouter.get(
 
 // auth logout
 authRouter.post("/logout", function (req, resp, next) {
-  // https://www.initialapps.com/properly-logout-passportjs-express-session-for-single-page-app/
-  // keep trying
-
-  resp.clearCookie("connect.sid");
-  req.logout(function (err) {
-    console.log(err);
-    req.session.destroy(function (err) {
-      // destroys the session
-      resp.send();
-    });
+  req.logout(req.user, (err) => {
+    if (err) return next(err);
   });
+  resp.clearCookie("connect.sid");
+  resp.send({ loggedIn: false, user: { ...req.user } });
 });
 
 // callback route for google to redirect to
