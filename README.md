@@ -42,4 +42,8 @@ npm start
 
 - db should only be acessible to external IPs during development
 
-- figure out why default port serving is broken
+TODOS:
+
+- finish checkout
+- implement order history
+- remove unneeded routes and db operations > update api spec
