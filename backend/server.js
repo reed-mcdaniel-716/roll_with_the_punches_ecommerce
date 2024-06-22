@@ -87,11 +87,17 @@ app.get("/users/current", isAuth, async (req, resp) => {
   }
 });
 
-app.delete("/users/:id", isAuth, async (req, resp) => {
-  console.log(`deleting user ${req.params.id}`);
-  const result = await db.deleteUser(req.params.id);
+app.post("/users/delete", isAuth, async (req, resp) => {
+  console.log(`deleting user ${req.user.id}`);
+  const result = await db.deleteUser(req.user.id);
+  console.log("result of user delete db action:", result);
   if (result.user_id) {
-    resp.status(200).json({ id: result.user_id });
+    // logout flow
+    req.logout(req.user, (err) => {
+      if (err) return next(err);
+    });
+    resp.clearCookie("connect.sid");
+    resp.send({ loggedIn: false, user: { ...req.user } });
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {

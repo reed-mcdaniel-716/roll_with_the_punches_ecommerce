@@ -383,9 +383,12 @@ const getOrder = async (order_id) => {
   }
 };
 
-const getAllOrders = async () => {
+const getAllOrders = async (user_id) => {
   try {
-    const result = await pool.query("select * from orders");
+    const result = await pool.query(
+      "select * from orders where user_id=$1::uuid",
+      [user_id]
+    );
     const orders = result.rows;
     return { orders: orders, error: null };
   } catch (err) {

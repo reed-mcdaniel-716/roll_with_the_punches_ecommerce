@@ -14,6 +14,22 @@ export const logout = async () => {
   return auth;
 };
 
+export const deleteAccount = async () => {
+  console.log('deleteAccount called ...');
+  const resp = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/delete`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // from MDN: Browsers should not send credentials in preflight requests irrespective of this setting.
+    credentials: 'include',
+  });
+
+  const accountDeletion = await resp.json();
+  console.log('accountDeletion response:', accountDeletion);
+  return accountDeletion;
+};
+
 // Products
 export const getAllProducts = async () => {
   const resp = await fetch(`${process.env.REACT_APP_SERVER_URL}/products`, {

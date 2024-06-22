@@ -11,7 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import Banner from '../components/Banner';
-import { logout } from '../api/api';
+import { deleteAccount, logout } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
@@ -25,6 +25,15 @@ const ProfilePage = () => {
     setAuth(logoutResp);
     navigate('/login');
   };
+
+  const handleDeleteAccount = async e => {
+    console.log('handleDeleteAccount called ...');
+    e.preventDefault();
+    const deleteAcctResp = await deleteAccount();
+    setAuth(deleteAcctResp);
+    navigate('/login');
+  };
+
   return (
     <Container bg="brand.rich_black" maxWidth="100%" minHeight="100vh">
       <Center>
@@ -52,6 +61,7 @@ const ProfilePage = () => {
                 </Button>
                 <Button
                   _hover={{ bg: 'brand.rich_black', color: 'whiteAlpha.900' }}
+                  onClick={handleDeleteAccount}
                 >
                   Delete Account
                 </Button>
