@@ -1,4 +1,3 @@
-// help from: https://medium.com/@prashantramnyc/node-js-with-passport-authentication-simplified-76ca65ee91e5
 const PORT = 4000;
 const express = require("express");
 const app = express();
@@ -57,18 +56,6 @@ const swaggerDocument = YAML.load("./openapi_spec.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // USERS
-
-app.get("/users", isAuth, async (req, resp) => {
-  console.log("getting users");
-  const result = await db.getAllUsers();
-  if (result.users) {
-    resp.status(200).json(result.users);
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
-  } else {
-    resp.status(500).json({ error: "Unknown error" });
-  }
-});
 
 app.get("/users/current", isAuth, async (req, resp) => {
   console.log("hit /users/current......");
@@ -150,35 +137,11 @@ app.post("/carts/manage", isAuth, async (req, resp) => {
   }
 });
 
-app.get("/carts/:id", isAuth, async (req, resp) => {
-  console.log(`getting cart ${req.params.id}`);
-  const result = await db.getCart(req.params.id);
-  if (result.cart) {
-    resp.status(200).json({ ...result.cart });
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
-  } else {
-    resp.status(500).json({ error: "Unknown error" });
-  }
-});
-
-app.delete("/carts/:id", isAuth, async (req, resp) => {
-  console.log(`deleting cart ${req.params.id}`);
-  const result = await db.deleteCart(req.params.id);
-  if (result.cart_id) {
-    resp.status(200).json({ id: result.cart_id });
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
-  } else {
-    resp.status(500).json({ error: "Unknown error" });
-  }
-});
-
-app.get("/carts", isAuth, async (req, resp) => {
-  console.log("getting carts");
-  const result = await db.getAllCarts();
+app.get("/carts/:user_id", isAuth, async (req, resp) => {
+  console.log(`getting cart for user ${req.params.user_id}`);
+  const result = await db.getCartsForUser(req.params.user_id);
   if (result.carts) {
-    resp.status(200).json(result.carts);
+    resp.status(200).json({ ...result.carts });
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {
@@ -202,23 +165,12 @@ app.post("/checkout/:user_id", isAuth, async (req, resp) => {
 });
 
 // ORDERS
-app.get("/orders", isAuth, async (req, resp) => {
-  console.log("getting orders");
-  const result = await db.getAllOrders();
-  if (result.orders) {
-    resp.status(200).json(result.orders);
-  } else if (result.error) {
-    resp.status(500).json({ error: result.error });
-  } else {
-    resp.status(500).json({ error: "Unknown error" });
-  }
-});
 
-app.get("/orders/:id", isAuth, async (req, resp) => {
-  console.log(`getting order ${req.params.id}`);
-  const result = await db.getOrder(req.params.id);
-  if (result.order) {
-    resp.status(200).json({ ...result.order });
+app.get("/orders/:user_id", isAuth, async (req, resp) => {
+  console.log(`getting orders for user ${req.params.user_id}`);
+  const result = await db.getOrdersForUser(req.params.user_id);
+  if (result.orders) {
+    resp.status(200).json({ ...result.orders });
   } else if (result.error) {
     resp.status(500).json({ error: result.error });
   } else {

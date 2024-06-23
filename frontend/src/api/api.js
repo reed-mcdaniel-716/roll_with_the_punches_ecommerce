@@ -75,3 +75,19 @@ export const manageCart = async (user_id, product_id, quantity) => {
   console.log('cart result:', JSON.stringify(cart_result));
   return cart_result;
 };
+
+export const getUserCarts = async user_id => {
+  const resp = await fetch(
+    `${process.env.REACT_APP_SERVER_URL}/carts/${user_id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }
+  );
+
+  const carts = await resp.json();
+  return carts;
+};

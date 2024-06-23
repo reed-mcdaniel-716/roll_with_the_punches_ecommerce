@@ -10,7 +10,7 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 import Banner from '../components/Banner';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 
 const LoginPage = () => {

@@ -11,140 +11,50 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
-  /signup:
-    summary: User signup
-    post:
-      summary: Initial user registration
-      description: Initial user registration
-      operationId: signup
-      tags:
-        - users
-  /login:
-    summary: User login
-    post:
-      summary: User login
+  /users/current:
+    summary: User account details of currently logged in user
+    get:
+      summary: GET operation
       description: ""
-      operationId: post_login
       tags:
         - users
-    get:
-      summary: Get login page
-      description: Get login page
-      operationId: get_login
-      tags:
-        - users
-  /users:
-    summary: User accounts
-    get:
-      summary: Get all users
+  /users/delete:
+    summary: Delete currently logged in user
+    post:
+      summary: POST operation
       description: ""
-      operationId: get_all_users
-      tags:
-        - users
-  /users/{id}:
-    summary: Specific user by ID
-    get:
-      summary: Get a user by ID
-      description: Get a user by ID
-      operationId: get_user
-      parameters:
-        - $ref: "#/components/parameters/idParam"
-      tags:
-        - users
-    patch:
-      summary: Update a user by ID
-      description: Update a user by ID
-      operationId: patch_user
-      parameters:
-        - $ref: "#/components/parameters/idParam"
-      tags:
-        - users
-    delete:
-      summary: Delete user by ID
-      description: Delete user by ID
-      operationId: delete_user
-      parameters:
-        - $ref: "#/components/parameters/idParam"
       tags:
         - users
   /products:
-    summary: Operations on products
+    summary: Operations on all products
     get:
       summary: Get all products
-      description: Get all products
-      operationId: get_all_products
-      tags:
-        - products
-    post:
-      summary: Create product
-      description: Create product
-      operationId: create_product
+      description: ""
       tags:
         - products
   /products/{id}:
     summary: Specific product by ID
     get:
       summary: Get a specific product by ID
-      description: Get a specific product by ID
-      operationId: get_product
+      description: ""
       parameters:
         - $ref: "#/components/parameters/idParam"
       tags:
         - products
-    patch:
-      summary: Update a product by ID
-      description: Update a product by ID
-      operationId: patch_product
-      parameters:
-        - $ref: "#/components/parameters/idParam"
-      tags:
-        - products
-    delete:
-      summary: Delete product by ID
-      description: Delete product by ID
-      operationId: delete_product
-      parameters:
-        - $ref: "#/components/parameters/idParam"
-      tags:
-        - products
-  /carts:
+  /carts/manage:
     summary: Operations on user carts
-    get:
-      summary: Get all carts
-      description: Get all carts
-      operationId: get_all_carts
-      tags:
-        - carts
     post:
-      summary: Create cart
-      description: Create cart
-      operationId: create_cart
+      summary: Create, update, or deletion of user cart
+      description: ""
       tags:
         - carts
-  /carts/{id}:
-    summary: Specific cart by ID
+  /carts/{user_id}:
+    summary: Specific carst by user ID
     get:
-      summary: Get a specific cart by ID
-      description: Get a specific cart by ID
-      operationId: get_cart
+      summary: Get a specific carts by user ID
+      description: ""
       parameters:
-        - $ref: "#/components/parameters/idParam"
-      tags:
-        - carts
-    patch:
-      summary: Update a cart by ID
-      description: Update a cart by ID (quantitiy of product only)
-      operationId: patch_cart
-      parameters:
-        - $ref: "#/components/parameters/idParam"
-      tags:
-        - carts
-    delete:
-      summary: Delete cart by ID
-      description: Delete cart by ID
-      operationId: delete_cart
-      parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: "#/components/parameters/userIdParam"
       tags:
         - carts
   /checkout/{user_id}:
@@ -152,27 +62,17 @@ paths:
     post:
       summary: Initiate a checkout transaction
       description: Converts all carts for a user into an order
-      operationId: post_checkout
       parameters:
         - $ref: "#/components/parameters/userIdParam"
       tags:
         - checkout
-  /orders:
-    summary: order accounts
+  /orders/{user_id}:
+    summary: Specific orders by user ID
     get:
-      summary: Get all orders
+      summary: Get history of all orders by user ID
       description: ""
-      operationId: get_all_orders
-      tags:
-        - orders
-  /orders/{id}:
-    summary: Specific order by ID
-    get:
-      summary: Get a specific order by ID
-      description: Get a specific order by ID
-      operationId: get_order
       parameters:
-        - $ref: "#/components/parameters/idParam"
+        - $ref: "#/components/parameters/userIdParam"
       tags:
         - orders
 components:

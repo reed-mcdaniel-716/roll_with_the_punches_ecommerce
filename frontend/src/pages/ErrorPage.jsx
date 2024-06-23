@@ -1,3 +1,4 @@
+import React from 'react';
 import { Container, Heading, VStack } from '@chakra-ui/react';
 
 const ErrorPage = () => {

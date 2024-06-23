@@ -227,7 +227,7 @@ const manageCart = async (user_id, product_id, quantity) => {
 
     // check for existing cart entry
     const result = await pool.query(
-      "select * from carts where product_id = $1::uuid and user_id = $2::uuid",
+      "select * from carts where product_id = $1::uuid and user_id = $2::uuid and checked_out = false",
       [product_id, user_id]
     );
 
@@ -250,7 +250,7 @@ const manageCart = async (user_id, product_id, quantity) => {
       // if cart entry exists and new quantity is zero, delete cart
       if (zeroQuantity) {
         const newResult = await pool.query(
-          "delete from carts where id = $1::uuid returning id",
+          "delete from carts where id = $1::uuid and checked_out = false returning id",
           [existingCart.id]
         );
 
@@ -273,34 +273,17 @@ const manageCart = async (user_id, product_id, quantity) => {
   }
 };
 
-const deleteCart = async (cart_id) => {
+const getCartsForUser = async (user_id) => {
   try {
-    if (cart_id === undefined) {
-      throw new Error("No cart_id provided to deleteCart");
-    }
-
     const result = await pool.query(
-      "delete from carts where id = $1::uuid returning id",
-      [cart_id]
+      "select * from carts  where user_id = $1::uuid and checked_out = false",
+      [user_id]
     );
-
-    const id = result.rows[0].id;
-    return { cart_id: id, error: null };
-  } catch (err) {
-    const errObj = constructError(err, "deleteCart");
-    console.log(`Error deleting cart: ${JSON.stringify(errObj)}`);
-    return { cart_id: null, error: errObj };
-  }
-};
-
-const getAllCarts = async () => {
-  try {
-    const result = await pool.query("select * from carts");
     const carts = result.rows;
     return { carts: carts, error: null };
   } catch (err) {
-    const errObj = constructError(err, "getAllCarts");
-    console.log(`Error getting all carts: ${JSON.stringify(errObj)}`);
+    const errObj = constructError(err, "getCartsForUser");
+    console.log(`Error getting all carts for user: ${JSON.stringify(errObj)}`);
     return { carts: null, error: errObj };
   }
 };
@@ -316,11 +299,18 @@ const checkout = async (user_id, isGift = false) => {
     // begin transaction
     await client.query("BEGIN");
     const cartResult = await client.query(
-      "select * from carts where user_id = $1::uuid",
+      "select * from carts where user_id = $1::uuid and checked_out = false",
       [user_id]
     );
     const carts = cartResult.rows;
     console.log(`user ${user_id}'s carts are: `, carts);
+
+    // mark carts as checked out
+    await client.query(
+      "update carts set checked_out = true where user_id = $1::uuid",
+      [user_id]
+    );
+
     const allCartIds = carts.map((cart) => {
       return cart.id;
     });
@@ -346,6 +336,7 @@ const checkout = async (user_id, isGift = false) => {
       "insert into orders (user_id, cart_id_arr, total_cost, is_gift) values ($1::uuid, $2::uuid[], $3::float8::numeric::money, $4::boolean) returning id",
       [user_id, allCartIds, totalOrderPrice, isGift]
     );
+
     await client.query("COMMIT");
 
     const finalOrder = orderResult.rows[0];
@@ -365,25 +356,7 @@ const checkout = async (user_id, isGift = false) => {
 
 // ORDERS
 
-const getOrder = async (order_id) => {
-  try {
-    if (order_id === undefined) {
-      throw new Error("No id provided for getOrder");
-    }
-    const result = await pool.query(
-      "select * from orders where id = $1::uuid",
-      [order_id]
-    );
-    const order = result.rows[0];
-    return { order: order, error: null };
-  } catch (err) {
-    const errObj = constructError(err, "getOrder");
-    console.log(`Error getting order: ${JSON.stringify(errObj)}`);
-    return { order: null, error: errObj };
-  }
-};
-
-const getAllOrders = async (user_id) => {
+const getOrdersForUser = async (user_id) => {
   try {
     const result = await pool.query(
       "select * from orders where user_id=$1::uuid",
@@ -392,8 +365,8 @@ const getAllOrders = async (user_id) => {
     const orders = result.rows;
     return { orders: orders, error: null };
   } catch (err) {
-    const errObj = constructError(err, "getAllOrders");
-    console.log(`Error getting all orders: ${JSON.stringify(errObj)}`);
+    const errObj = constructError(err, "getOrdersForUser");
+    console.log(`Error getting all orders for user: ${JSON.stringify(errObj)}`);
     return { orders: null, error: errObj };
   }
 };
@@ -410,10 +383,8 @@ module.exports = {
   createProduct,
   getProduct,
   manageCart,
-  deleteCart,
+  getCartsForUser,
   checkout,
-  getOrder,
   getAllProducts,
-  getAllCarts,
-  getAllOrders,
+  getOrdersForUser,
 };

@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/reed-mcdaniel-716/roll_with_the_punches_ecommerce#readme",
   "devDependencies": {
+    "@eslint/js": "^9.5.0",
     "@faker-js/faker": "^8.3.1",
-    "@types/node": "^20.10.2"
+    "@types/node": "^20.10.2",
+    "eslint": "^9.5.0",
+    "globals": "^15.6.0"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -1,3 +1,4 @@
+import React from 'react';
 import { HiOutlineUserCircle } from 'react-icons/hi';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { Flex, Link as ChakraLink, Text } from '@chakra-ui/react';

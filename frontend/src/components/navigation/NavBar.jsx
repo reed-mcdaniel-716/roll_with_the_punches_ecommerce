@@ -1,3 +1,4 @@
+import React from 'react';
 import { Flex, Spacer } from '@chakra-ui/react';
 import HomeLink from './HomeLink';
 import CheckoutLink from './CheckoutLink';

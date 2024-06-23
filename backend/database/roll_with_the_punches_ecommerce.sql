@@ -79,7 +79,8 @@ CREATE TABLE IF NOT EXISTS "carts" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
   "user_id" uuid NOT NULL,
   "product_id" uuid NOT NULL,
-  "quantity" integer NOT NULL DEFAULT 0
+  "quantity" integer NOT NULL DEFAULT 0,
+  "checked_out" boolean NOT NULL DEFAULT FALSE
 );
 CREATE TABLE IF NOT EXISTS "orders" (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),

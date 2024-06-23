@@ -1,3 +1,4 @@
+import React from 'react';
 import { Heading, Highlight, VStack } from '@chakra-ui/react';
 
 const Banner = () => {

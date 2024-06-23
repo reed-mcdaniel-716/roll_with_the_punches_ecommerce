@@ -14,6 +14,7 @@ import {
 import ErrorPage from './pages/ErrorPage';
 import ProductDetails from './components/products/ProductDetails';
 import ProfilePage from './pages/ProfilePage';
+import CheckoutPage from './pages/CheckoutPage';
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
               <Route path="/home" element={<HomePage />} />
               <Route path="/products/:id" element={<ProductDetails />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
             </Route>
             <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<ErrorPage />} />

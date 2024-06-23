@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { Center, Container, Heading, VStack } from '@chakra-ui/react';
 import Banner from '../components/Banner';
 import ProductListings from '../components/products/ProductListings';

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   NumberInput,
   NumberInputField,
@@ -5,6 +6,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 
 const ItemCounter = ({ count, setCount }) => {
   const handleOnChange = (_valueAsString, valueAsNumber) => {
@@ -27,6 +29,10 @@ const ItemCounter = ({ count, setCount }) => {
       </NumberInputStepper>
     </NumberInput>
   );
+};
+
+ItemCounter.PropTypes = {
+  firstname: PropTypes.string.isRequired,
 };
 
 export default ItemCounter;
