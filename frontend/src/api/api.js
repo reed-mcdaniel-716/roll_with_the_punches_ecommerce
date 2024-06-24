@@ -87,3 +87,36 @@ export const getUserCarts = async user_id => {
   const carts = await resp.json();
   return carts;
 };
+
+export const checkout = async (user_id, is_gift) => {
+  const resp = await fetch(
+    `${process.env.REACT_APP_SERVER_URL}/checkout/${user_id}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ is_gift }),
+    }
+  );
+
+  const checkout_result = await resp.json();
+  return checkout_result;
+};
+
+export const getOrdersForUser = async user_id => {
+  const resp = await fetch(
+    `${process.env.REACT_APP_SERVER_URL}/orders/${user_id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }
+  );
+
+  const orders = await resp.json();
+  return orders;
+};

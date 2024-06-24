@@ -41,9 +41,3 @@ npm start
 - To test API locally with Postman, grab the `$GITHUB_TOKEN` via the cli in the Codespace, and set it as `X-Github-Token` header in your Postman requests
 
 - db should only be acessible to external IPs during development
-
-TODOS:
-
-- finish checkout
-- implement order history
-- remove unneeded routes and db operations > update api spec

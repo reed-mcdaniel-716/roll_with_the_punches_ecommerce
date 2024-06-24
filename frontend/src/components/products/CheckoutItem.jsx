@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { getProductById } from '../../api/api';
 import PropTypes from 'prop-types';
 
-const CheckoutItem = ({ cart, key }) => {
+const CheckoutItem = ({ cart }) => {
   const navigate = useNavigate();
   const [product, setProduct] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +44,7 @@ const CheckoutItem = ({ cart, key }) => {
   }
 
   return (
-    <ListItem key={key} my={4}>
+    <ListItem key={cart.id} my={4}>
       <HStack spacing={2}>
         <ListIcon as={CheckIcon} color="green.500" />
         <Text color="whiteAlpha.900">
@@ -63,7 +63,6 @@ const CheckoutItem = ({ cart, key }) => {
 
 CheckoutItem.propTypes = {
   cart: PropTypes.object,
-  key: PropTypes.string,
 };
 
 export default CheckoutItem;

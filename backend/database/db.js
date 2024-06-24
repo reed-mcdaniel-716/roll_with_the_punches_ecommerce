@@ -277,7 +277,6 @@ const getCartsForUser = async (user_id) => {
       "select * from carts  where user_id = $1::uuid and checked_out = false",
       [user_id]
     );
-    console.error("result of query for carts:", result);
     const carts = result.rows;
     return { carts: carts, error: null };
   } catch (err) {

@@ -1,6 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
   Button,
   Card,
   CardHeader,
@@ -9,15 +14,19 @@ import {
   Container,
   Heading,
   VStack,
+  Spinner,
 } from '@chakra-ui/react';
 import Banner from '../components/Banner';
-import { deleteAccount, logout } from '../api/api';
+import { deleteAccount, logout, getOrdersForUser } from '../api/api';
 import { useNavigate } from 'react-router-dom';
+import OrderHistoryItem from '../components/products/OrderHistoryItem';
 
 const ProfilePage = () => {
   const { auth, setAuth } = useContext(UserContext);
   const currentUser = auth?.user;
   const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleLogout = async e => {
     e.preventDefault();
@@ -32,6 +41,30 @@ const ProfilePage = () => {
     setAuth(deleteAcctResp);
     navigate('/login');
   };
+
+  useEffect(() => {
+    async function loadOrders() {
+      const orders = Object.values(await getOrdersForUser(currentUser.id));
+      setOrders(orders);
+      setIsLoading(false);
+    }
+    loadOrders();
+  }, []);
+
+  const orderItems = orders.map(order => {
+    // eslint-disable-next-line react/jsx-key
+    return <OrderHistoryItem key={order.id} order={order}></OrderHistoryItem>;
+  });
+
+  if (isLoading) {
+    return (
+      <Container bg="brand.rich_black" maxWidth="100%" minHeight="100vh">
+        <Center>
+          <Spinner color="whiteAlpha.900" />
+        </Center>
+      </Container>
+    );
+  }
 
   return (
     <Container bg="brand.rich_black" maxWidth="100%" minHeight="100vh">
@@ -65,6 +98,29 @@ const ProfilePage = () => {
                   Delete Account
                 </Button>
               </VStack>
+            </CardBody>
+          </Card>
+          <Card
+            bg="brand.rich_black"
+            my={4}
+            align="center"
+            borderWidth={4}
+            borderColor="whiteAlpha.900"
+            maxW="md"
+          >
+            <CardHeader>
+              <Heading color="whiteAlpha.900" as="h3" size="xl">
+                Order History
+              </Heading>
+            </CardHeader>
+            <CardBody>
+              <Accordion
+                defaultIndex={[0]}
+                allowMultiple
+                color="whiteAlpha.900"
+              >
+                {orderItems}
+              </Accordion>
             </CardBody>
           </Card>
         </VStack>

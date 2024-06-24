@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const PORT = 4000;
 const express = require("express");
 const app = express();
@@ -6,6 +7,7 @@ const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
 const authRouter = require("./auth/auth");
 // requiring runs file contents
+// eslint-disable-next-line no-unused-vars
 const passportSetup = require("./auth/passport-setup");
 const session = require("express-session");
 const cors = require("cors");
