@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { UserContext } from '../../context/UserContext';
 import { Navigate, Outlet } from 'react-router-dom';
 import { Center, Container, Spinner } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 
 const PrivateRoute = ({ children }) => {
   const { auth, isLoading } = useContext(UserContext);
@@ -22,6 +23,13 @@ const PrivateRoute = ({ children }) => {
   }
 
   return children || <Outlet />;
+};
+
+PrivateRoute.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
 };
 
 export default PrivateRoute;

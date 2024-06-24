@@ -1,15 +1,14 @@
+/* eslint-disable no-undef */
 require("dotenv").config();
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20");
 const db = require("../database/db");
 
 passport.serializeUser((user, done) => {
-  console.log("serializing user:", user);
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  console.log("desearializing user:", id);
   db.getUserById(id).then((result) => {
     done(null, result.user);
   });
@@ -25,13 +24,9 @@ passport.use(
     },
     async (_accessToken, _refreshToken, profile, done) => {
       // callback for authentication
-      console.log(
-        `logging in user ${profile.displayName} with google_id ${profile.id}`
-      );
       db.getUserByGoogleId(profile.id).then(async (result) => {
         if (result.user) {
           // already have user
-          console.log("found current user: ", result.user);
           // update username to match profile
           await db.updateUser(result.user.id, profile.displayName);
           done(null, result.user);
@@ -42,7 +37,6 @@ passport.use(
               if (result1.user_id) {
                 // user created successfully
                 const result2 = await db.getUserById(result1.user_id);
-                console.log("created new user: ", result2.user);
                 done(null, result2.user);
               } else {
                 throw new Error(result1.error);

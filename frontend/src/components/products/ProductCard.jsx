@@ -9,6 +9,7 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
@@ -48,6 +49,10 @@ const ProductCard = ({ product }) => {
       </CardFooter>
     </Card>
   );
+};
+
+ProductCard.propTypes = {
+  product: PropTypes.object,
 };
 
 export default ProductCard;

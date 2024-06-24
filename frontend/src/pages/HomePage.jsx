@@ -13,7 +13,7 @@ const HomePage = () => {
         <VStack>
           <Banner />
           <Heading as="h3" color="whiteAlpha.900" margin={6}>
-            Welcome {currentUser.username}, let's get you some gear
+            Welcome {currentUser.username}, let&apos;s get you some gear
           </Heading>
           <ProductListings />
         </VStack>

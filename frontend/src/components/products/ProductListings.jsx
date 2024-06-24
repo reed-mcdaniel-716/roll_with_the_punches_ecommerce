@@ -1,9 +1,16 @@
 import { getAllProducts } from '../../api/api';
 import React, { useState, useEffect } from 'react';
-import { SimpleGrid, Select } from '@chakra-ui/react';
+import {
+  Center,
+  Container,
+  SimpleGrid,
+  Select,
+  Spinner,
+} from '@chakra-ui/react';
 import ProductCard from './ProductCard';
 
 const ProductListings = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [allProducts, setAllProducts] = useState([]);
   const [products, setProducts] = useState([]);
   // initial data load of products
@@ -12,6 +19,7 @@ const ProductListings = () => {
       const products = await getAllProducts();
       setAllProducts(products);
       setProducts(products);
+      setIsLoading(false);
     }
     loadProducts();
   }, []);
@@ -49,6 +57,16 @@ const ProductListings = () => {
   const productCards = products.map((product, idx) => {
     return <ProductCard key={idx} product={product} />;
   });
+
+  if (isLoading) {
+    return (
+      <Container bg="brand.rich_black" maxWidth="100%" minHeight="100vh">
+        <Center>
+          <Spinner color="whiteAlpha.900" />
+        </Center>
+      </Container>
+    );
+  }
 
   return (
     <>

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // Auth
 export const logout = async () => {
   const resp = await fetch(`${process.env.REACT_APP_SERVER_URL}/auth/logout`, {
@@ -10,12 +11,10 @@ export const logout = async () => {
   });
 
   const auth = await resp.json();
-  console.log('logout response:', auth);
   return auth;
 };
 
 export const deleteAccount = async () => {
-  console.log('deleteAccount called ...');
   const resp = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/delete`, {
     method: 'POST',
     headers: {
@@ -26,7 +25,6 @@ export const deleteAccount = async () => {
   });
 
   const accountDeletion = await resp.json();
-  console.log('accountDeletion response:', accountDeletion);
   return accountDeletion;
 };
 
@@ -70,9 +68,7 @@ export const manageCart = async (user_id, product_id, quantity) => {
     body: JSON.stringify({ user_id, product_id, quantity }),
   });
 
-  console.log('cart response raw:', JSON.stringify(resp));
   const cart_result = await resp.json();
-  console.log('cart result:', JSON.stringify(cart_result));
   return cart_result;
 };
 

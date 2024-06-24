@@ -27,7 +27,6 @@ const ProfilePage = () => {
   };
 
   const handleDeleteAccount = async e => {
-    console.log('handleDeleteAccount called ...');
     e.preventDefault();
     const deleteAcctResp = await deleteAccount();
     setAuth(deleteAcctResp);

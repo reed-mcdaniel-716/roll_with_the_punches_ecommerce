@@ -58,26 +58,19 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // USERS
 
 app.get("/users/current", isAuth, async (req, resp) => {
-  console.log("hit /users/current......");
   if (req.user) {
     const user = {
       user: { ...req.user },
       loggedIn: true,
     };
-    console.log(
-      "in /users/current have user attached to req, crafting response:",
-      user
-    );
     resp.status(200).json(user);
   } else {
     resp.status(500).json({ error: "Error getting user" });
   }
 });
 
-app.post("/users/delete", isAuth, async (req, resp) => {
-  console.log(`deleting user ${req.user.id}`);
+app.post("/users/delete", isAuth, async (req, resp, next) => {
   const result = await db.deleteUser(req.user.id);
-  console.log("result of user delete db action:", result);
   if (result.user_id) {
     // logout flow
     req.logout(req.user, (err) => {
@@ -94,7 +87,6 @@ app.post("/users/delete", isAuth, async (req, resp) => {
 
 // PRODUCTS
 app.get("/products", isAuth, async (req, resp) => {
-  console.log("getting products");
   const result = await db.getAllProducts();
   if (result.products) {
     resp.status(200).json(result.products);
@@ -106,7 +98,6 @@ app.get("/products", isAuth, async (req, resp) => {
 });
 
 app.get("/products/:id", isAuth, async (req, resp) => {
-  console.log(`getting product ${req.params.id}`);
   const result = await db.getProduct(req.params.id);
   if (result.product) {
     resp.status(200).json({ ...result.product });
@@ -120,14 +111,11 @@ app.get("/products/:id", isAuth, async (req, resp) => {
 // CARTS
 
 app.post("/carts/manage", isAuth, async (req, resp) => {
-  console.log(`managing cart with attributes: `);
-  console.log(req.body);
   const result = await db.manageCart(
     req.body.user_id,
     req.body.product_id,
     req.body.quantity
   );
-  console.log("cart result serverside:", result);
   if (!result.error) {
     resp.status(200).json({ id: result.cart_id });
   } else if (result.error) {
@@ -138,7 +126,6 @@ app.post("/carts/manage", isAuth, async (req, resp) => {
 });
 
 app.get("/carts/:user_id", isAuth, async (req, resp) => {
-  console.log(`getting cart for user ${req.params.user_id}`);
   const result = await db.getCartsForUser(req.params.user_id);
   if (result.carts) {
     resp.status(200).json({ ...result.carts });
@@ -151,9 +138,6 @@ app.get("/carts/:user_id", isAuth, async (req, resp) => {
 
 // CHECKOUT
 app.post("/checkout/:user_id", isAuth, async (req, resp) => {
-  console.log(
-    `checking out for user ${req.params.user_id} and that it is a gift is ${req.body.is_gift}`
-  );
   const result = await db.checkout(req.params.user_id, req.body.is_gift);
   if (result.order) {
     resp.status(200).json({ ...result.order });
@@ -167,7 +151,6 @@ app.post("/checkout/:user_id", isAuth, async (req, resp) => {
 // ORDERS
 
 app.get("/orders/:user_id", isAuth, async (req, resp) => {
-  console.log(`getting orders for user ${req.params.user_id}`);
   const result = await db.getOrdersForUser(req.params.user_id);
   if (result.orders) {
     resp.status(200).json({ ...result.orders });

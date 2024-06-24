@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 require("dotenv").config();
 const pg = require("pg");
 const _ = require("lodash");
@@ -42,13 +43,12 @@ const createUser = async (username, google_id) => {
     return { user_id: id, error: null };
   } catch (err) {
     const errObj = constructError(err, "createUser");
-    console.log(`Error creating user: ${JSON.stringify(errObj)}`);
+    console.error(`Error creating user: ${JSON.stringify(errObj)}`);
     return { user_id: null, error: errObj };
   }
 };
 
 const getUserByUsername = async (username) => {
-  console.log(`looking for user: ${username}`);
   try {
     if (username === undefined) {
       throw new Error("No username provided to getUserByUsername");
@@ -61,13 +61,12 @@ const getUserByUsername = async (username) => {
     return { user: user, error: null };
   } catch (err) {
     const errObj = constructError(err, "getUserByUsername");
-    console.log(`Error geting user ${username}: ${JSON.stringify(errObj)}`);
+    console.error(`Error geting user ${username}: ${JSON.stringify(errObj)}`);
     return { user: null, error: errObj };
   }
 };
 
 const getUserById = async (id) => {
-  console.log(`looking for user: ${id}`);
   try {
     if (id === undefined) {
       throw new Error("No id provided to getUserById");
@@ -79,13 +78,12 @@ const getUserById = async (id) => {
     return { user: user, error: null };
   } catch (err) {
     const errObj = constructError(err, "getUserById");
-    console.log(`Error geting user ${id}: ${JSON.stringify(errObj)}`);
+    console.error(`Error geting user ${id}: ${JSON.stringify(errObj)}`);
     return { user: null, error: errObj };
   }
 };
 
 const getUserByGoogleId = async (google_id) => {
-  console.log(`looking for user with google_id: ${google_id}`);
   try {
     if (google_id === undefined) {
       throw new Error("No id provided to getUserByGoogleId");
@@ -98,7 +96,7 @@ const getUserByGoogleId = async (google_id) => {
     return { user: user, error: null };
   } catch (err) {
     const errObj = constructError(err, "getUserByGoogleId");
-    console.log(
+    console.error(
       `Error geting user with google_id ${google_id}: ${JSON.stringify(errObj)}`
     );
     return { user: null, error: errObj };
@@ -125,7 +123,7 @@ const updateUser = async (user_id, username) => {
     }
   } catch (err) {
     const errObj = constructError(err, "updateUser");
-    console.log(`Error updating user: ${JSON.stringify(errObj)}`);
+    console.error(`Error updating user: ${JSON.stringify(errObj)}`);
     return { user_id: null, error: errObj };
   }
 };
@@ -145,7 +143,7 @@ const deleteUser = async (user_id) => {
     return { user_id: id, error: null };
   } catch (err) {
     const errObj = constructError(err, "deleteUser");
-    console.log(`Error deleting user: ${JSON.stringify(errObj)}`);
+    console.error(`Error deleting user: ${JSON.stringify(errObj)}`);
     return { user_id: null, error: errObj };
   }
 };
@@ -173,7 +171,7 @@ const createProduct = async (
     return { product_id: id, error: null };
   } catch (err) {
     const errObj = constructError(err, "createProduct");
-    console.log(`Error creating product: ${JSON.stringify(errObj)}`);
+    console.error(`Error creating product: ${JSON.stringify(errObj)}`);
     return { product_id: null, error: errObj };
   }
 };
@@ -191,7 +189,7 @@ const getProduct = async (product_id) => {
     return { product: product, error: null };
   } catch (err) {
     const errObj = constructError(err, "getProduct");
-    console.log(`Error getting product: ${JSON.stringify(errObj)}`);
+    console.error(`Error getting product: ${JSON.stringify(errObj)}`);
     return { product: null, error: errObj };
   }
 };
@@ -203,7 +201,7 @@ const getAllProducts = async () => {
     return { products: products, error: null };
   } catch (err) {
     const errObj = constructError(err, "getAllProducts");
-    console.log(`Error getting all products: ${JSON.stringify(errObj)}`);
+    console.error(`Error getting all products: ${JSON.stringify(errObj)}`);
     return { products: null, error: errObj };
   }
 };
@@ -268,7 +266,7 @@ const manageCart = async (user_id, product_id, quantity) => {
     }
   } catch (err) {
     const errObj = constructError(err, "manageCart");
-    console.log(`Error managing cart: ${JSON.stringify(errObj)}`);
+    console.error(`Error managing cart: ${JSON.stringify(errObj)}`);
     return { cart_id: null, error: errObj };
   }
 };
@@ -279,11 +277,14 @@ const getCartsForUser = async (user_id) => {
       "select * from carts  where user_id = $1::uuid and checked_out = false",
       [user_id]
     );
+    console.error("result of query for carts:", result);
     const carts = result.rows;
     return { carts: carts, error: null };
   } catch (err) {
     const errObj = constructError(err, "getCartsForUser");
-    console.log(`Error getting all carts for user: ${JSON.stringify(errObj)}`);
+    console.error(
+      `Error getting all carts for user: ${JSON.stringify(errObj)}`
+    );
     return { carts: null, error: errObj };
   }
 };
@@ -303,7 +304,6 @@ const checkout = async (user_id, isGift = false) => {
       [user_id]
     );
     const carts = cartResult.rows;
-    console.log(`user ${user_id}'s carts are: `, carts);
 
     // mark carts as checked out
     await client.query(
@@ -347,7 +347,7 @@ const checkout = async (user_id, isGift = false) => {
   } catch (err) {
     await client.query("ROLLBACK");
     const errObj = constructError(err, "checkout");
-    console.log(`Error checking out: ${JSON.stringify(errObj)}`);
+    console.error(`Error checking out: ${JSON.stringify(errObj)}`);
     return { order: null, error: errObj };
   } finally {
     client.release();
@@ -366,7 +366,9 @@ const getOrdersForUser = async (user_id) => {
     return { orders: orders, error: null };
   } catch (err) {
     const errObj = constructError(err, "getOrdersForUser");
-    console.log(`Error getting all orders for user: ${JSON.stringify(errObj)}`);
+    console.error(
+      `Error getting all orders for user: ${JSON.stringify(errObj)}`
+    );
     return { orders: null, error: errObj };
   }
 };

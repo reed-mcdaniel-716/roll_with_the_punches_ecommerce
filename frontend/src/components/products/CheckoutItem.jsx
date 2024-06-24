@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   Container,
+  HStack,
   ListIcon,
   ListItem,
   Spinner,
@@ -11,6 +12,7 @@ import {
 import { CheckIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import { getProductById } from '../../api/api';
+import PropTypes from 'prop-types';
 
 const CheckoutItem = ({ cart, key }) => {
   const navigate = useNavigate();
@@ -42,14 +44,26 @@ const CheckoutItem = ({ cart, key }) => {
   }
 
   return (
-    <ListItem key={key}>
-      <ListIcon as={CheckIcon} color="green.500" />
-      <Text>
-        {product.name}: {cart.quantity}
-      </Text>
-      <Button onClick={handleOnClick}>Update</Button>
+    <ListItem key={key} my={4}>
+      <HStack spacing={2}>
+        <ListIcon as={CheckIcon} color="green.500" />
+        <Text color="whiteAlpha.900">
+          {product.name}: {cart.quantity}
+        </Text>
+        <Button
+          _hover={{ bg: 'brand.rich_black', color: 'whiteAlpha.900' }}
+          onClick={handleOnClick}
+        >
+          Update
+        </Button>
+      </HStack>
     </ListItem>
   );
+};
+
+CheckoutItem.propTypes = {
+  cart: PropTypes.object,
+  key: PropTypes.string,
 };
 
 export default CheckoutItem;

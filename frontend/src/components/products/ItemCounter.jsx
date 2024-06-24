@@ -31,8 +31,9 @@ const ItemCounter = ({ count, setCount }) => {
   );
 };
 
-ItemCounter.PropTypes = {
-  firstname: PropTypes.string.isRequired,
+ItemCounter.propTypes = {
+  count: PropTypes.number,
+  setCount: PropTypes.func,
 };
 
 export default ItemCounter;

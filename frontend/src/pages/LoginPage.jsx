@@ -16,11 +16,12 @@ import { UserContext } from '../context/UserContext';
 const LoginPage = () => {
   const handleOnClick = e => {
     e.preventDefault();
+    // eslint-disable-next-line no-undef
     const url = `${process.env.REACT_APP_SERVER_URL}/auth/google`;
     window.open(url, '_self');
   };
 
-  const { auth, isLoading } = useContext(UserContext);
+  const { isLoading } = useContext(UserContext);
 
   if (isLoading) {
     return <Spinner color="whiteAlpha.900" />;
