@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const PORT = `${process.env.SERVER_PORT}`;
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const db = require("./database/db");
@@ -16,7 +16,8 @@ const isAuth = require("./auth/isAuth");
 const morgan = require("morgan");
 
 // Logging + Formatting
-app.use(morgan("dev"));
+const loggingFormat = process.env.NODE_ENV === "dev" ? "dev" : "tiny";
+app.use(morgan(loggingFormat));
 app.use(express.json());
 
 // Security + Cookie + Session config
@@ -25,8 +26,8 @@ app.use(
     credentials: true,
     origin:
       process.env.NODE_ENV === "dev"
-        ? [process.env.CLIENT_URL, process.env.CLIENT_IP_URL]
-        : [],
+        ? [process.env.LOCAL_CLIENT_URL, process.env.LOCAL_CLIENT_IP_URL]
+        : [process.env.CLIENT_URL],
   })
 );
 
@@ -168,6 +169,7 @@ app.get("/", async (_req, resp) => {
   resp.redirect("/api-docs");
 });
 
+const PORT = `${process.env.SERVER_PORT}`;
 app.listen(PORT, async () => {
   console.log(`Server started on port ${PORT}...`);
 });

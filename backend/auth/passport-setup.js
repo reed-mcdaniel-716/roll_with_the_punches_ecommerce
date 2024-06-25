@@ -51,5 +51,3 @@ passport.use(
     }
   )
 );
-
-// look at this youtube vid: https://www.youtube.com/watch?v=pGAQlEh7urw
