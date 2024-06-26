@@ -5,10 +5,12 @@ const GoogleStrategy = require("passport-google-oauth20");
 const db = require("../database/db");
 
 passport.serializeUser((user, done) => {
+  console.log("serializing user:", user);
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
+  console.log("deserializing user:", id);
   db.getUserById(id).then((result) => {
     done(null, result.user);
   });
@@ -28,12 +30,14 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     },
     async (_accessToken, _refreshToken, profile, done) => {
+      console.log("callback in GoogleStrategy...");
       // callback for authentication
       db.getUserByGoogleId(profile.id).then(async (result) => {
         if (result.user) {
           // already have user
           // update username to match profile
           await db.updateUser(result.user.id, profile.displayName);
+          console.log("found existing user and returning user part:", result);
           done(null, result.user);
         } else if (!result.error) {
           // if not and no error, create new user
@@ -42,6 +46,10 @@ passport.use(
               if (result1.user_id) {
                 // user created successfully
                 const result2 = await db.getUserById(result1.user_id);
+                console.log(
+                  "created new user and returning user part:",
+                  result2
+                );
                 done(null, result2.user);
               } else {
                 throw new Error(result1.error);

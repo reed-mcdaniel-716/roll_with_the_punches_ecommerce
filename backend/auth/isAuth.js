@@ -1,4 +1,5 @@
 const isAuth = (req, res, next) => {
+  console.log("isAuth called with the following req:", req);
   if (req.user) {
     next();
   } else {

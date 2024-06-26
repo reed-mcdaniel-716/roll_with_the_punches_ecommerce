@@ -17,7 +17,8 @@ const morgan = require("morgan");
 const MemoryStore = require("memorystore")(session);
 
 // Logging + Formatting
-const loggingFormat = process.env.NODE_ENV === "dev" ? "dev" : "tiny";
+//const loggingFormat = process.env.NODE_ENV === "dev" ? "dev" : "tiny";
+const loggingFormat = "dev";
 app.use(morgan(loggingFormat));
 app.use(express.json());
 
