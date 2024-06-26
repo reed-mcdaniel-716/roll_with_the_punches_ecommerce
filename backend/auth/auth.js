@@ -34,7 +34,7 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", { session: true }),
   (req, resp) => {
-    console.log("/google/callback hit with the following req:", req);
+    console.log("/google/callback hit with the following req.user:", req.user);
     resp.redirect(`${baseUrl}`);
   }
 );
