@@ -1,7 +1,12 @@
 /* eslint-disable no-undef */
+const baseUrl =
+  process.env.NODE_ENV === 'dev'
+    ? process.env.REACT_APP_LOCAL_SERVER_URL
+    : process.env.REACT_APP_SERVER_URL;
+
 // Auth
 export const logout = async () => {
-  const resp = await fetch(`${process.env.REACT_APP_SERVER_URL}/auth/logout`, {
+  const resp = await fetch(`${baseUrl}/auth/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -15,7 +20,7 @@ export const logout = async () => {
 };
 
 export const deleteAccount = async () => {
-  const resp = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/delete`, {
+  const resp = await fetch(`${baseUrl}/users/delete`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +35,7 @@ export const deleteAccount = async () => {
 
 // Products
 export const getAllProducts = async () => {
-  const resp = await fetch(`${process.env.REACT_APP_SERVER_URL}/products`, {
+  const resp = await fetch(`${baseUrl}/products`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -43,23 +48,20 @@ export const getAllProducts = async () => {
 };
 
 export const getProductById = async id => {
-  const resp = await fetch(
-    `${process.env.REACT_APP_SERVER_URL}/products/${id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    }
-  );
+  const resp = await fetch(`${baseUrl}/products/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
 
   const product = await resp.json();
   return product;
 };
 
 export const manageCart = async (user_id, product_id, quantity) => {
-  const resp = await fetch(`${process.env.REACT_APP_SERVER_URL}/carts/manage`, {
+  const resp = await fetch(`${baseUrl}/carts/manage`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -73,49 +75,40 @@ export const manageCart = async (user_id, product_id, quantity) => {
 };
 
 export const getUserCarts = async user_id => {
-  const resp = await fetch(
-    `${process.env.REACT_APP_SERVER_URL}/carts/${user_id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    }
-  );
+  const resp = await fetch(`${baseUrl}/carts/${user_id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
 
   const carts = await resp.json();
   return carts;
 };
 
 export const checkout = async (user_id, is_gift) => {
-  const resp = await fetch(
-    `${process.env.REACT_APP_SERVER_URL}/checkout/${user_id}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ is_gift }),
-    }
-  );
+  const resp = await fetch(`${baseUrl}/checkout/${user_id}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({ is_gift }),
+  });
 
   const checkout_result = await resp.json();
   return checkout_result;
 };
 
 export const getOrdersForUser = async user_id => {
-  const resp = await fetch(
-    `${process.env.REACT_APP_SERVER_URL}/orders/${user_id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    }
-  );
+  const resp = await fetch(`${baseUrl}/orders/${user_id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
 
   const orders = await resp.json();
   return orders;

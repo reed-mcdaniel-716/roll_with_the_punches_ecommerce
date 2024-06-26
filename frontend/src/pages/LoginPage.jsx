@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import {
   Button,
   Card,
@@ -17,7 +18,11 @@ const LoginPage = () => {
   const handleOnClick = e => {
     e.preventDefault();
     // eslint-disable-next-line no-undef
-    const url = `${process.env.REACT_APP_SERVER_URL}/auth/google`;
+    const baseUrl =
+      process.env.NODE_ENV === 'dev'
+        ? process.env.REACT_APP_LOCAL_SERVER_URL
+        : process.env.REACT_APP_SERVER_URL;
+    const url = `${baseUrl}/auth/google`;
     window.open(url, '_self');
   };
 

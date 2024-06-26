@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { createContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -9,9 +10,13 @@ export const UserContextProvider = ({ children }) => {
   }));
   const [isLoading, setIsLoading] = useState(true);
 
+  const baseUrl =
+    process.env.NODE_ENV === 'dev'
+      ? process.env.REACT_APP_LOCAL_SERVER_URL
+      : process.env.REACT_APP_SERVER_URL;
+
   useEffect(() => {
-    // eslint-disable-next-line no-undef
-    fetch(`${process.env.REACT_APP_SERVER_URL}/users/current`, {
+    fetch(`${baseUrl}/users/current`, {
       credentials: 'include',
     })
       .then(r => r.json())
