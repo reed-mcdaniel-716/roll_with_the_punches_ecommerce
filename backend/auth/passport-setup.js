@@ -14,14 +14,16 @@ passport.deserializeUser(async (id, done) => {
   });
 });
 
+const callbackUrl =
+  process.env.NODE_ENV === "dev"
+    ? process.env.LOCAL_GOOGLE_CALLBACK_URL
+    : process.env.GOOGLE_CALLBACK_URL;
+
 passport.use(
   new GoogleStrategy(
     {
       // stategy options
-      callbackURL:
-        process.env.NODE_ENV === "dev"
-          ? process.env.LOCAL_GOOGLE_CALLBACK_URL
-          : process.env.GOOGLE_CALLBACK_URL,
+      callbackURL: callbackUrl,
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     },

@@ -3,6 +3,11 @@ require("dotenv").config();
 const express = require("express");
 const passport = require("passport");
 
+const baseUrl =
+  process.env.NODE_ENV === "dev"
+    ? process.env.LOCAL_CLIENT_URL
+    : process.env.CLIENT_URL;
+
 const authRouter = express.Router();
 
 // auth with google
@@ -29,7 +34,7 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", { session: true }),
   (req, resp) => {
-    resp.redirect(`${process.env.CLIENT_URL}`);
+    resp.redirect(`${baseUrl}`);
   }
 );
 

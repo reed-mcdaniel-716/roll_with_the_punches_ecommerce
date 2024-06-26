@@ -20,14 +20,16 @@ const loggingFormat = process.env.NODE_ENV === "dev" ? "dev" : "tiny";
 app.use(morgan(loggingFormat));
 app.use(express.json());
 
+const originUrls =
+  process.env.NODE_ENV === "dev"
+    ? [process.env.LOCAL_CLIENT_URL, process.env.LOCAL_CLIENT_IP_URL]
+    : [process.env.CLIENT_URL];
+
 // Security + Cookie + Session config
 app.use(
   cors({
     credentials: true,
-    origin:
-      process.env.NODE_ENV === "dev"
-        ? [process.env.LOCAL_CLIENT_URL, process.env.LOCAL_CLIENT_IP_URL]
-        : [process.env.CLIENT_URL],
+    origin: originUrls,
   })
 );
 
