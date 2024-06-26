@@ -14,6 +14,7 @@ const cors = require("cors");
 const passport = require("passport");
 const isAuth = require("./auth/isAuth");
 const morgan = require("morgan");
+const MemoryStore = require("memorystore")(session);
 
 // Logging + Formatting
 const loggingFormat = process.env.NODE_ENV === "dev" ? "dev" : "tiny";
@@ -40,12 +41,13 @@ app.use(
   session({
     secret: process.env.COOKIE_SESSION_KEY,
     cookie: {
-      secure: "auto",
-      sameSite: "lax",
-      //secure: process.env.NODE_ENV === "production" ? "true" : "auto",
-      //sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production" ? "true" : "auto",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       //expires: 60 * 60 * 1000,
     },
+    store: new MemoryStore({
+      checkPeriod: 86400000, // prune expired entries every 24h
+    }),
     resave: false,
     saveUninitialized: false,
   })
