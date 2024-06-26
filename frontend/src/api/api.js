@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const baseUrl =
-  process.env.NODE_ENV === 'dev'
+  process.env.REACT_APP_NODE_ENV === 'dev'
     ? process.env.REACT_APP_LOCAL_SERVER_URL
     : process.env.REACT_APP_SERVER_URL;
 

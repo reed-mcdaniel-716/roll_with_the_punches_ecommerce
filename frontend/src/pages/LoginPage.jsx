@@ -19,7 +19,7 @@ const LoginPage = () => {
     e.preventDefault();
     // eslint-disable-next-line no-undef
     const baseUrl =
-      process.env.NODE_ENV === 'dev'
+      process.env.REACT_APP_NODE_ENV === 'dev'
         ? process.env.REACT_APP_LOCAL_SERVER_URL
         : process.env.REACT_APP_SERVER_URL;
     const url = `${baseUrl}/auth/google`;
