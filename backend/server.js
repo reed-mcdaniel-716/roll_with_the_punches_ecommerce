@@ -40,8 +40,10 @@ app.use(
   session({
     secret: process.env.COOKIE_SESSION_KEY,
     cookie: {
-      secure: process.env.NODE_ENV === "production" ? "true" : "auto",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: "auto",
+      sameSite: "lax",
+      //secure: process.env.NODE_ENV === "production" ? "true" : "auto",
+      //sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       //expires: 60 * 60 * 1000,
     },
     resave: false,
