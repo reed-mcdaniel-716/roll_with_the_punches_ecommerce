@@ -15,13 +15,11 @@ export const UserContextProvider = ({ children }) => {
       : process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
-    console.log('useeffect in UserContext called:', `${baseUrl}/users/current`);
     fetch(`${baseUrl}/users/current`, {
       credentials: 'include',
     })
       .then(r => r.json())
       .then(data => {
-        console.log('data setting for auth:', { ...data });
         setAuth({ ...data });
       })
       .then(() => setIsLoading(false))
