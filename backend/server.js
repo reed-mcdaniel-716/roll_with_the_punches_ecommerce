@@ -38,6 +38,9 @@ app.use(
 // CORS enables for pre-flight reqs
 app.options("*", cors());
 
+// Render has app behind a proxy
+app.set("trust proxy", 1);
+
 app.use(
   session({
     secret: process.env.COOKIE_SESSION_KEY,
