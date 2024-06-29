@@ -75,12 +75,11 @@ const ProductListings = () => {
         onChange={handleOnChange}
         bg="whiteAlpha.900"
         size="lg"
+        maxWidth={'max-content'}
       >
         {productOptions}
       </Select>
-      <SimpleGrid columns={3} spacing={4}>
-        {productCards}
-      </SimpleGrid>
+      <SimpleGrid minChildWidth={60}>{productCards}</SimpleGrid>
     </>
   );
 };

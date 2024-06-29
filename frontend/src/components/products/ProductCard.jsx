@@ -25,7 +25,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Card color="brand.rich_black" bg="whiteAlpha.900">
+    <Card color="brand.rich_black" bg="whiteAlpha.900" margin={2}>
       <CardHeader mx="auto">
         <Heading as="h4">{product.name}</Heading>
       </CardHeader>

@@ -4,8 +4,7 @@ import {
   Card,
   CardHeader,
   CardBody,
-  Center,
-  Container,
+  Flex,
   Heading,
   VStack,
   Spinner,
@@ -33,36 +32,38 @@ const LoginPage = () => {
   }
 
   return (
-    <Container bg="brand.rich_black" maxWidth="100%" minHeight="100vh">
-      <Center>
-        <VStack>
-          <Banner />
-          <Card
-            bg="brand.rich_black"
-            my={8}
-            align="center"
-            borderWidth={4}
-            borderColor="whiteAlpha.900"
-          >
-            <CardHeader>
-              <Heading color="whiteAlpha.900" as="h3" size="xl">
-                Please login to continue to the site
-              </Heading>
-            </CardHeader>
-            <CardBody>
-              <VStack>
-                <Button
-                  onClick={handleOnClick}
-                  _hover={{ bg: 'brand.rich_black', color: 'whiteAlpha.900' }}
-                >
-                  Google Login
-                </Button>
-              </VStack>
-            </CardBody>
-          </Card>
-        </VStack>
-      </Center>
-    </Container>
+    <Flex
+      bg="brand.rich_black"
+      direction={'column'}
+      align={'center'}
+      justify={'center'}
+    >
+      <Banner />
+      <Card
+        bg="brand.rich_black"
+        my={8}
+        align="center"
+        borderWidth={4}
+        borderColor="whiteAlpha.900"
+        maxWidth={'max-content'}
+      >
+        <CardHeader>
+          <Heading color="whiteAlpha.900" as="h3" size="xl">
+            Please login to continue to the site
+          </Heading>
+        </CardHeader>
+        <CardBody>
+          <VStack>
+            <Button
+              onClick={handleOnClick}
+              _hover={{ bg: 'brand.rich_black', color: 'whiteAlpha.900' }}
+            >
+              Google Login
+            </Button>
+          </VStack>
+        </CardBody>
+      </Card>
+    </Flex>
   );
 };
 

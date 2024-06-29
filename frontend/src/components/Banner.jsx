@@ -1,13 +1,14 @@
 import React from 'react';
-import { Heading, Highlight, VStack } from '@chakra-ui/react';
+import { Flex, Heading, Highlight } from '@chakra-ui/react';
 
 const Banner = () => {
   return (
-    <VStack>
+    <Flex direction={'column'} align={'center'} justify={'center'}>
       <Heading color="whiteAlpha.900" as="h1" size="3xl">
         Roll with the Punches
       </Heading>
-      <Heading color="whiteAlpha.900" as="h2" size="2xl">
+      <br />
+      <Heading color="whiteAlpha.900" as="h2" size="xl">
         <Highlight
           query="Premier Boxing Gear"
           styles={{
@@ -21,7 +22,7 @@ const Banner = () => {
           Your Home For Premier Boxing Gear
         </Highlight>
       </Heading>
-    </VStack>
+    </Flex>
   );
 };
 
