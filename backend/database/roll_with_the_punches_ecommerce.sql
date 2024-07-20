@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS carts;
-DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roll_with_the_punches.orders;
+DROP TABLE IF EXISTS roll_with_the_punches.carts;
+DROP TABLE IF EXISTS roll_with_the_punches.products;
+DROP TABLE IF EXISTS roll_with_the_punches.users;
 
-DROP TYPE IF EXISTS product_sizes;
-CREATE TYPE "product_sizes" AS ENUM (
+DROP TYPE IF EXISTS roll_with_the_punches.product_sizes;
+CREATE TYPE roll_with_the_punches.product_sizes AS ENUM (
   '10oz',
   '12oz',
   '14oz',
@@ -21,8 +21,8 @@ CREATE TYPE "product_sizes" AS ENUM (
   'xxxl'
 );
 
-DROP TYPE IF EXISTS product_colors;
-CREATE TYPE "product_colors" AS ENUM (
+DROP TYPE IF EXISTS roll_with_the_punches.product_colors;
+CREATE TYPE roll_with_the_punches.product_colors AS ENUM (
   'black',
   'red',
   'blue',
@@ -36,8 +36,8 @@ CREATE TYPE "product_colors" AS ENUM (
   'purple'
 );
 
-DROP TYPE IF EXISTS product_brands;
-CREATE TYPE "product_brands" AS ENUM (
+DROP TYPE IF EXISTS roll_with_the_punches.product_brands;
+CREATE TYPE roll_with_the_punches.product_brands AS ENUM (
   'Everlast',
   'Ringside',
   'Venum',
@@ -47,8 +47,8 @@ CREATE TYPE "product_brands" AS ENUM (
   'Title'
 );
 
-DROP TYPE IF EXISTS product_categories;
-CREATE TYPE "product_categories" AS ENUM (
+DROP TYPE IF EXISTS roll_with_the_punches.product_categories;
+CREATE TYPE roll_with_the_punches.product_categories AS ENUM (
   'gloves',
   'wraps',
   'bag',
@@ -58,14 +58,14 @@ CREATE TYPE "product_categories" AS ENUM (
 );
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE TABLE IF NOT EXISTS "users" (
+CREATE TABLE IF NOT EXISTS roll_with_the_punches.users (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
   "username" varchar(100) UNIQUE NOT NULL,
   "google_id" varchar(100),
   "created_at" timestamp NOT NULL DEFAULT NOW(),
   "updated_at" timestamp NOT NULL DEFAULT NOW()
 );
-CREATE TABLE IF NOT EXISTS "products" (
+CREATE TABLE IF NOT EXISTS roll_with_the_punches.products (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
   "name" varchar(100) UNIQUE NOT NULL,
   "size" product_sizes NOT NULL,
@@ -75,14 +75,14 @@ CREATE TABLE IF NOT EXISTS "products" (
   "price" money NOT NULL DEFAULT 20.00,
   "description" varchar(1000)
 );
-CREATE TABLE IF NOT EXISTS "carts" (
+CREATE TABLE IF NOT EXISTS roll_with_the_punches.carts (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
   "user_id" uuid NOT NULL,
   "product_id" uuid NOT NULL,
   "quantity" integer NOT NULL DEFAULT 0,
   "checked_out" boolean NOT NULL DEFAULT FALSE
 );
-CREATE TABLE IF NOT EXISTS "orders" (
+CREATE TABLE IF NOT EXISTS roll_with_the_punches.orders (
   "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
   "user_id" uuid NOT NULL,
   "cart_id_arr" uuid [] NOT NULL,
@@ -90,12 +90,12 @@ CREATE TABLE IF NOT EXISTS "orders" (
   "order_date" timestamp NOT NULL DEFAULT NOW(),
   "is_gift" boolean DEFAULT false
 );
-CREATE UNIQUE INDEX ON "carts" USING BTREE ("user_id", "product_id");
-CREATE INDEX ON "orders" USING BTREE ("order_date");
-CREATE INDEX ON "orders" USING BTREE ("user_id");
-ALTER TABLE "carts"
-ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
-ALTER TABLE "carts"
-ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id") ON DELETE CASCADE;
-ALTER TABLE "orders"
-ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
+CREATE UNIQUE INDEX ON roll_with_the_punches.carts USING BTREE ("user_id", "product_id");
+CREATE INDEX ON roll_with_the_punches.orders USING BTREE ("order_date");
+CREATE INDEX ON roll_with_the_punches.orders USING BTREE ("user_id");
+ALTER TABLE roll_with_the_punches.carts
+ADD FOREIGN KEY ("user_id") REFERENCES roll_with_the_punches.users ("id") ON DELETE CASCADE;
+ALTER TABLE roll_with_the_punches.carts
+ADD FOREIGN KEY ("product_id") REFERENCES roll_with_the_punches.products ("id") ON DELETE CASCADE;
+ALTER TABLE roll_with_the_punches.orders
+ADD FOREIGN KEY ("user_id") REFERENCES roll_with_the_punches.users ("id") ON DELETE CASCADE;
