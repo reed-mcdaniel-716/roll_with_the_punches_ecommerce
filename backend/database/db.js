@@ -27,6 +27,10 @@ const pool = new pg.Pool({
   ssl: true,
 });
 
+pool.on('connect', (client) => {
+  client.query(`SET search_path TO roll_with_the_punches, public`);
+});
+
 // USERS
 const createUser = async (username, google_id) => {
   try {
